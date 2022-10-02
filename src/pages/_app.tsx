@@ -4,7 +4,8 @@ import { AppShell, ColorSchemeProvider, MantineProvider } from "@mantine/core";
 import AdminHeader from "../elements/core/admin-header";
 import { useDisclosure, useToggle } from "@mantine/hooks";
 import AdminNavbar from "../elements/core/admin-navbar";
-import { IconDashboard, IconHome } from "@tabler/icons";
+import { IconHome, IconNews } from "@tabler/icons";
+import { mantineTheme } from "../utils";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -16,9 +17,9 @@ export default function App(props: AppProps) {
 
   const links = [
     {
-      title: "Dashboard",
-      Icon: IconDashboard,
-      link: "dashboard",
+      title: "Posts",
+      Icon: IconNews,
+      link: "/posts",
     },
     {
       title: "Dashboard",
@@ -52,6 +53,7 @@ export default function App(props: AppProps) {
           theme={{
             /** Put your mantine theme override here */
             colorScheme,
+            ...mantineTheme,
           }}
         >
           <AppShell
