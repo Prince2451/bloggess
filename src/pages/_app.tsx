@@ -1,9 +1,12 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { AppShell, MantineProvider } from "@mantine/core";
+import AdminNavbar from "../elements/core/admin-header";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
+  const [isOpen, handlers] = useDisclosure(false);
 
   return (
     <>
@@ -24,7 +27,9 @@ export default function App(props: AppProps) {
           colorScheme: "light",
         }}
       >
-        <AppShell>
+        <AppShell
+          navbar={<AdminNavbar isOpen={isOpen} onToggle={handlers.toggle} />}
+        >
           <Component {...pageProps} />
         </AppShell>
       </MantineProvider>
