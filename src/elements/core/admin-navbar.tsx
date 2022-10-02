@@ -92,7 +92,7 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ links, isOpen }) => {
         <Space h="lg" />
         <List listStyleType="none" spacing={2}>
           {links.map((link, i) => (
-            <List.Item key={i}>
+            <List.Item key={i} mx={2}>
               <Link
                 className={classes.link}
                 href={link.link}
