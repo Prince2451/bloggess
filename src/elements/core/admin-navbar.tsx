@@ -39,6 +39,24 @@ const useStyles = createStyles((theme, _, getRef) => {
           color: theme.colorScheme === "dark" ? theme.white : theme.black,
         },
       },
+      "&.active": {
+        "&, &:hover": {
+          backgroundColor: theme.fn.variant({
+            variant: "light",
+            color: theme.primaryColor,
+          }).background,
+          color: theme.fn.variant({
+            variant: "light",
+            color: theme.primaryColor,
+          }).color,
+          [`& .${icon}`]: {
+            color: theme.fn.variant({
+              variant: "light",
+              color: theme.primaryColor,
+            }).color,
+          },
+        },
+      },
     },
 
     linkIcon: {
@@ -48,23 +66,6 @@ const useStyles = createStyles((theme, _, getRef) => {
           ? theme.colors.dark[2]
           : theme.colors.gray[6],
       marginRight: theme.spacing.sm,
-    },
-
-    active: {
-      "&, &:hover": {
-        backgroundColor: theme.fn.variant({
-          variant: "light",
-          color: theme.primaryColor,
-        }).background,
-        color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
-          .color,
-        [`& .${icon}`]: {
-          color: theme.fn.variant({
-            variant: "light",
-            color: theme.primaryColor,
-          }).color,
-        },
-      },
     },
   };
 });
