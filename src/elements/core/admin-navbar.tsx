@@ -97,7 +97,6 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ links, isOpen }) => {
                 className={classes.link}
                 href={link.link}
                 activeClassName="active"
-                isExact
               >
                 <link.Icon className={classes.linkIcon} />
                 <Text>{link.title}</Text>
