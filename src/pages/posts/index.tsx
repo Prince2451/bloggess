@@ -78,7 +78,7 @@ const Posts: NextPage = () => {
       recordsPerPage={10}
       totalRecords={posts.length}
       minHeight={10}
-      onRowClick={(post) => router.push(post.slug)}
+      onRowClick={(post) => router.push(router.pathname + "/" + post.slug)}
     />
   );
 };
