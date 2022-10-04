@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import React from "react";
 import type { RichTextEditorProps } from "@mantine/rte";
 import { createStyles } from "@mantine/core";
 import hljs from "highlight.js";
@@ -47,7 +46,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ ...props }) => {
     syntax: {
       highlight: (text: string) => hljs.highlightAuto(text).value,
     },
-    imageResize: {},
   };
   return (
     <Editor quill={null} classNames={classes} modules={modules} {...props} />
