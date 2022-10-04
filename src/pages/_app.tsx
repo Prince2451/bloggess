@@ -6,6 +6,7 @@ import { useDisclosure, useToggle } from "@mantine/hooks";
 import AdminNavbar from "../elements/core/admin-navbar";
 import { IconHome, IconNews } from "@tabler/icons";
 import { mantineTheme } from "../utils";
+import GlobalStyles from "../components/global-styles";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -56,6 +57,8 @@ export default function App(props: AppProps) {
             ...mantineTheme,
           }}
         >
+          {/* for global styles */}
+          <GlobalStyles />
           <AppShell
             header={<AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />}
             navbar={<AdminNavbar isOpen={isOpen} links={links} />}
