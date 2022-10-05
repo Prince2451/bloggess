@@ -10,13 +10,6 @@ const Editor = dynamic(
     const { StyledCodeBlock } = await import("./Quill");
     // registering
     Quill.register(StyledCodeBlock);
-    if (RichTextEditor.defaultProps) {
-      RichTextEditor.defaultProps.quill = Quill;
-    } else {
-      RichTextEditor.defaultProps = {
-        quill: Quill,
-      };
-    }
     return RichTextEditor;
   },
   {
@@ -39,7 +32,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({ ...props }) => {
+const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
   const { classes } = useStyles();
 
   const modules: RichTextEditorProps["modules"] = {
@@ -48,7 +41,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ ...props }) => {
     },
   };
   return (
-    <Editor quill={null} classNames={classes} modules={modules} {...props} />
+    <Editor classNames={classes} modules={modules} {...props} />
   );
 };
 
