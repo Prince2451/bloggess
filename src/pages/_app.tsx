@@ -1,6 +1,11 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { AppShell, ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import {
+  AppShell,
+  ColorSchemeProvider,
+  Container,
+  MantineProvider,
+} from "@mantine/core";
 import AdminHeader from "../elements/core/admin-header";
 import { useDisclosure, useToggle } from "@mantine/hooks";
 import AdminNavbar from "../elements/core/admin-navbar";
@@ -64,7 +69,9 @@ export default function App(props: AppProps) {
             navbar={<AdminNavbar isOpen={isOpen} links={links} />}
             navbarOffsetBreakpoint="sm"
           >
-            <Component {...pageProps} />
+            <Container size={"sm"}>
+              <Component {...pageProps} />
+            </Container>
           </AppShell>
         </MantineProvider>
       </ColorSchemeProvider>
