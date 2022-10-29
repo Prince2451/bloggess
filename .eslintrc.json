@@ -2,7 +2,9 @@
   "extends": ["next/core-web-vitals", "prettier"],
   "rules": {
     "no-unused-vars": "error",
-    "prefer-const": "error"
+    "prefer-const": "error",
+    "prettier/prettier": "error"
   },
-  "ignorePatterns": ["build/**/*"]
+  "ignorePatterns": ["build/**/*"],
+  "plugins": ["prettier"]
 }

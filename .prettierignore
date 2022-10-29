@@ -2,9 +2,7 @@
 build
 coverage
 .next
-.vscode
 node_modules
 public
-.eslintrc.json
 .gitignore
 yarn.lock
