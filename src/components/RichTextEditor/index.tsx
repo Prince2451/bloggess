@@ -40,9 +40,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
       highlight: (text: string) => hljs.highlightAuto(text).value,
     },
   };
-  return (
-    <Editor classNames={classes} modules={modules} {...props} />
-  );
+  return <Editor classNames={classes} modules={modules} {...props} />;
 };
 
 export default RichTextEditor;
