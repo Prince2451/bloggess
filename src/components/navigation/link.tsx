@@ -20,7 +20,7 @@ const Link: React.FC<LinkProps> = ({
   const router = useRouter();
 
   return (
-    <NextLink href={href} passHref>
+    <NextLink href={href} passHref legacyBehavior>
       <Anchor
         className={clsx(className, {
           [activeClassName]: isExact

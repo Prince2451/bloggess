@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons";
 import SecurityIcon from "../../../public/assets/icons/security.svg";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Link from "../../components/navigation/link";
 
 const useStyles = createStyles((theme) => ({

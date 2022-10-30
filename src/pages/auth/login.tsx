@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@mantine/core";
 import { NextPage } from "next";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Link from "../../components/navigation/link";
 import Wrapper from "../../elements/auth/wrapper";
 import CelebrationsIcon from "../../../public/assets/icons/celebration-user.svg";
