@@ -13,7 +13,7 @@ import { IconHome, IconNews } from "@tabler/icons";
 import { mantineTheme } from "../utils";
 import GlobalStyles from "../components/global-styles";
 
-export default function App(props: AppProps) {
+export default function App(props: AppProps<{ layout?: "admin" }>) {
   const { Component, pageProps } = props;
   const [isOpen, handlers] = useDisclosure(false);
   const [colorScheme, toggleColorScheme] = useToggle([
@@ -65,11 +65,23 @@ export default function App(props: AppProps) {
           {/* for global styles */}
           <GlobalStyles />
           <AppShell
-            header={<AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />}
-            navbar={<AdminNavbar isOpen={isOpen} links={links} />}
+            header={
+              pageProps.layout === "admin" ? (
+                <AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />
+              ) : (
+                <></>
+              )
+            }
+            navbar={
+              pageProps.layout === "admin" ? (
+                <AdminNavbar isOpen={isOpen} links={links} />
+              ) : (
+                <></>
+              )
+            }
             navbarOffsetBreakpoint="sm"
           >
-            <Container size={"sm"}>
+            <Container size="sm" style={{ height: "100%" }}>
               <Component {...pageProps} />
             </Container>
           </AppShell>
