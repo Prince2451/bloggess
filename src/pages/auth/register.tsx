@@ -5,7 +5,7 @@ import {
   Text,
   Button,
   Stack,
-  Popover,
+  Collapse,
 } from "@mantine/core";
 import { NextPage } from "next";
 import Image from "next/legacy/image";
@@ -58,6 +58,8 @@ const Register: NextPage = () => {
       email: "",
       password: "",
     },
+    validateInputOnBlur: true,
+    validateInputOnChange: ["password"],
     validate: zodResolver(schema),
   });
 
@@ -86,36 +88,28 @@ const Register: NextPage = () => {
             <TextInput
               label="Name"
               placeholder="Peter Parker"
-              required
+              withAsterisk
               {...form.getInputProps("name")}
             />
             <TextInput
               label="Email"
               placeholder="you@email.com"
-              required
+              withAsterisk
               {...form.getInputProps("email")}
             />
-            <Popover
-              opened={popoverOpened}
-              position="bottom"
-              width="target"
-              transition="pop"
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              withAsterisk
+              {...form.getInputProps("password")}
+            />
+            <Collapse
+              in={Boolean(form.errors.password && form.isTouched("password"))}
             >
-              <Popover.Target>
-                <PasswordInput
-                  label="Password"
-                  placeholder="Your password"
-                  required
-                  {...form.getInputProps("password")}
-                />
-              </Popover.Target>
-              <Popover.Dropdown>
-                <PasswordStrength
-                  requirements={passRequirements(form.values.password)}
-                />
-              </Popover.Dropdown>
-            </Popover>
-
+              <PasswordStrength
+                requirements={passRequirements(form.values.password)}
+              />
+            </Collapse>
             <Button type="submit" fullWidth>
               Sign in
             </Button>
