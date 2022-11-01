@@ -12,6 +12,7 @@ import AdminNavbar from "../elements/core/admin-navbar";
 import { IconHome, IconNews } from "@tabler/icons";
 import { mantineTheme } from "../utils";
 import GlobalStyles from "../components/global-styles";
+import { NotificationsProvider } from "@mantine/notifications";
 
 export default function App(props: AppProps<{ layout?: "admin" }>) {
   const { Component, pageProps } = props;
@@ -62,29 +63,31 @@ export default function App(props: AppProps<{ layout?: "admin" }>) {
             ...mantineTheme,
           }}
         >
-          {/* for global styles */}
-          <GlobalStyles />
-          <AppShell
-            header={
-              pageProps.layout === "admin" ? (
-                <AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />
-              ) : (
-                <></>
-              )
-            }
-            navbar={
-              pageProps.layout === "admin" ? (
-                <AdminNavbar isOpen={isOpen} links={links} />
-              ) : (
-                <></>
-              )
-            }
-            navbarOffsetBreakpoint="sm"
-          >
-            <Container size="sm" style={{ height: "100%" }}>
-              <Component {...pageProps} />
-            </Container>
-          </AppShell>
+          <NotificationsProvider>
+            {/* for global styles */}
+            <GlobalStyles />
+            <AppShell
+              header={
+                pageProps.layout === "admin" ? (
+                  <AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />
+                ) : (
+                  <></>
+                )
+              }
+              navbar={
+                pageProps.layout === "admin" ? (
+                  <AdminNavbar isOpen={isOpen} links={links} />
+                ) : (
+                  <></>
+                )
+              }
+              navbarOffsetBreakpoint="sm"
+            >
+              <Container size="sm" style={{ height: "100%" }}>
+                <Component {...pageProps} />
+              </Container>
+            </AppShell>
+          </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>
