@@ -1,6 +1,7 @@
 const apiUrls = {
   auth: {
     refreshToken: "/auth/tokens",
+    login: "/auth/login",
   },
 };
 

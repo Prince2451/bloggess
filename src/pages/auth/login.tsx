@@ -15,6 +15,9 @@ import Wrapper from "../../elements/auth/wrapper";
 import CelebrationsIcon from "../../../public/assets/icons/celebration-user.svg";
 import { z } from "zod";
 import { useForm, zodResolver } from "@mantine/form";
+import { useState } from "react";
+import { login } from "../../services/auth";
+import { useAuthStore } from "../../stores";
 
 const schema = z.object({
   email: z.string().email({ message: "Valid email address is required" }),
@@ -22,6 +25,10 @@ const schema = z.object({
 });
 
 const Login: NextPage = () => {
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  const setAuthDetails = useAuthStore((state) => state.setAuthDetails);
+
   const form = useForm({
     initialValues: {
       email: "",
@@ -30,6 +37,20 @@ const Login: NextPage = () => {
     validate: zodResolver(schema),
     validateInputOnBlur: true,
   });
+
+  const onSubmit = async (values: typeof form.values) => {
+    setIsLoggingIn(true);
+    try {
+      const { data } = await login(values);
+      setAuthDetails({
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoggingIn(false);
+  };
 
   return (
     <Wrapper
@@ -43,7 +64,7 @@ const Login: NextPage = () => {
         />
       }
     >
-      <form onSubmit={form.onSubmit(() => void null)}>
+      <form onSubmit={form.onSubmit(onSubmit)}>
         <Text color="dimmed" size="sm" align="center" mt={5}>
           Do not have an account yet?{" "}
           <Link href="register" size="sm">
@@ -71,7 +92,7 @@ const Login: NextPage = () => {
                 Forgot password?
               </Link>
             </Group>
-            <Button type="submit" fullWidth>
+            <Button loading={isLoggingIn} type="submit" fullWidth>
               Sign in
             </Button>
           </Stack>
