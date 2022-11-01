@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     document.cookie = "";
-    const token = useAuthStore.getState().user?.accessToken;
+    const token = useAuthStore.getState().authDetails?.accessToken;
     config.headers = config.headers || {};
     if (token && !config.headers["Authorization"]) {
       config.headers["Authorization"] = "Bearer " + token;
@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
     const req = err.config;
     if (err.response?.status === 401 && req) {
       try {
-        const refreshToken = useAuthStore.getState().user?.refreshToken;
+        const refreshToken = useAuthStore.getState().authDetails?.refreshToken;
         if (!refreshToken) throw new Error("Refresh token doesn't exists");
         const res = await axios.post<{ token: string }>(
           apiUrls.auth.refreshToken,
@@ -51,14 +51,14 @@ axiosInstance.interceptors.response.use(
           if (token) {
             useAuthStore
               .getState()
-              .setUser({ accessToken: token, refreshToken });
+              .setAuthDetails({ accessToken: token, refreshToken });
             req.headers = req.headers || {};
             req.headers["Authorization"] = "Bearer " + token;
             return axiosInstance(req);
           }
         }
       } catch {
-        useAuthStore.getState().setUser(null);
+        useAuthStore.getState().setAuthDetails(null);
         return { data: null };
       }
     }
