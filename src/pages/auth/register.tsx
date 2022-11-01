@@ -20,6 +20,9 @@ import PasswordStrength from "../../elements/auth/password-strength";
 import { useEffect, useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
+import { register } from "../../services/auth";
+import { showNotification } from "@mantine/notifications";
+import { getErrorMessage } from "../../utils";
 
 const useStyles = createStyles((theme) => ({
   nameInputsContainer: {
@@ -71,6 +74,7 @@ const schema = z.object({
 
 const Register: NextPage = () => {
   const [popoverOpened, setPopoverOpened] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const theme = useMantineTheme();
   const { classes } = useStyles();
@@ -85,6 +89,25 @@ const Register: NextPage = () => {
     validateInputOnChange: ["password"],
     validate: zodResolver(schema),
   });
+
+  const onSubmit = async (values: typeof form.values) => {
+    setIsRegistering(true);
+    try {
+      await register(values);
+      showNotification({
+        title: "User created successfully",
+        message: "Please login to continue",
+        color: "green",
+      });
+    } catch (err: any) {
+      showNotification({
+        title: getErrorMessage(err),
+        message: "Please check your email",
+        color: "red",
+      });
+    }
+    setIsRegistering(false);
+  };
 
   useEffect(() => {
     if (form.errors.password && form.isTouched("password") && !popoverOpened) {
@@ -105,7 +128,7 @@ const Register: NextPage = () => {
           Login
         </Link>
       </Text>
-      <form onSubmit={form.onSubmit(() => void null)}>
+      <form onSubmit={form.onSubmit(onSubmit)}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <Stack spacing={theme.spacing.md}>
             <Box className={classes.nameInputsContainer}>
@@ -143,7 +166,7 @@ const Register: NextPage = () => {
                 requirements={passRequirements(form.values.password)}
               />
             </Collapse>
-            <Button type="submit" fullWidth>
+            <Button loading={isRegistering} type="submit" fullWidth>
               Sign in
             </Button>
           </Stack>

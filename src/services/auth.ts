@@ -9,9 +9,25 @@ interface LoginResponse {
   accessToken: string;
   refreshToken: string;
 }
+interface RegisterRequest {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName?: string;
+}
+interface RegisterResponse {
+  firstName: string;
+  lastName: string;
+  email: string;
+  id: string;
+}
 
 function login(payload: LoginRequest) {
   return axiosInstance.post<LoginResponse>(apiUrls.auth.login, payload);
 }
 
-export { login };
+function register(payload: RegisterRequest) {
+  return axiosInstance.post<RegisterResponse>(apiUrls.auth.register, payload);
+}
+
+export { login, register };
