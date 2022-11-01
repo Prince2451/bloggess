@@ -23,6 +23,7 @@ import { z } from "zod";
 import { register } from "../../services/auth";
 import { showNotification } from "@mantine/notifications";
 import { getErrorMessage } from "../../utils";
+import { useRouter } from "next/router";
 
 const useStyles = createStyles((theme) => ({
   nameInputsContainer: {
@@ -77,6 +78,7 @@ const Register: NextPage = () => {
   const [isRegistering, setIsRegistering] = useState(false);
 
   const theme = useMantineTheme();
+  const router = useRouter();
   const { classes } = useStyles();
   const form = useForm({
     initialValues: {
@@ -95,14 +97,15 @@ const Register: NextPage = () => {
     try {
       await register(values);
       showNotification({
-        title: "User created successfully",
-        message: "Please login to continue",
+        title: "Success",
+        message: "User created successfully",
         color: "green",
       });
+      router.push("/auth/login");
     } catch (err: any) {
       showNotification({
-        title: getErrorMessage(err),
-        message: "Please check your email",
+        title: "Error",
+        message: getErrorMessage(err),
         color: "red",
       });
     }
