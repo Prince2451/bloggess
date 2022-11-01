@@ -11,10 +11,6 @@ axiosInstance.interceptors.request.use(
     document.cookie = "";
     const token = useAuthStore.getState().user?.accessToken;
     config.headers = config.headers || {};
-    config.headers["Content-type"] = "application/json";
-    if (config.url === "auth/login") {
-      return config;
-    }
     if (token && !config.headers["Authorization"]) {
       config.headers["Authorization"] = "Bearer " + token;
     }
@@ -42,6 +38,7 @@ axiosInstance.interceptors.response.use(
     if (err.response?.status === 401 && req) {
       try {
         const refreshToken = useAuthStore.getState().user?.refreshToken;
+        if (!refreshToken) throw new Error("Refresh token doesn't exists");
         const res = await axios.post<{ token: string }>(
           apiUrls.auth.refreshToken,
           {
@@ -52,7 +49,9 @@ axiosInstance.interceptors.response.use(
         if (res.status === 200) {
           const token = res.data.token;
           if (token) {
-            useAuthStore.setState((state) => (state.user.accessToken = token));
+            useAuthStore
+              .getState()
+              .setUser({ accessToken: token, refreshToken });
             req.headers = req.headers || {};
             req.headers["Authorization"] = "Bearer " + token;
             return axiosInstance(req);
