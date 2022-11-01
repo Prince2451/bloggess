@@ -18,6 +18,8 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import { login } from "../../services/auth";
 import { useAuthStore } from "../../stores";
+import { showNotification } from "@mantine/notifications";
+import { getErrorMessage } from "../../utils";
 
 const schema = z.object({
   email: z.string().email({ message: "Valid email address is required" }),
@@ -46,8 +48,12 @@ const Login: NextPage = () => {
         accessToken: data.accessToken,
         refreshToken: data.refreshToken,
       });
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      showNotification({
+        title: "Error",
+        message: getErrorMessage(err),
+        color: "red",
+      });
     }
     setIsLoggingIn(false);
   };
