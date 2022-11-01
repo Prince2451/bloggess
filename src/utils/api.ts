@@ -57,9 +57,9 @@ axiosInstance.interceptors.response.use(
             return axiosInstance(req);
           }
         }
-      } catch {
+      } catch (err) {
         useAuthStore.getState().setAuthDetails(null);
-        return { data: null };
+        return Promise.reject(err);
       }
     }
     return Promise.reject(err);
