@@ -6,6 +6,10 @@ import {
   Button,
   Stack,
   Collapse,
+  Box,
+  createStyles,
+  Space,
+  useMantineTheme,
 } from "@mantine/core";
 import { NextPage } from "next";
 import Image from "next/legacy/image";
@@ -16,6 +20,20 @@ import PasswordStrength from "../../elements/auth/password-strength";
 import { useEffect, useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
+
+const useStyles = createStyles((theme) => ({
+  nameInputsContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    [theme.fn.smallerThan("sm")]: {
+      flexDirection: "column",
+    },
+  },
+  nameInput: {
+    width: "100%",
+  },
+}));
 
 const passRequirements = (value: string) => {
   const requirements = [
@@ -41,7 +59,8 @@ const passRequirements = (value: string) => {
 };
 
 const schema = z.object({
-  name: z.string().trim().min(1, "Name is required"),
+  firstName: z.string().trim().min(1, "Name is required"),
+  lastName: z.string().optional(),
   email: z.string().email("Valid email address is required"),
   password: z
     .string()
@@ -52,9 +71,13 @@ const schema = z.object({
 
 const Register: NextPage = () => {
   const [popoverOpened, setPopoverOpened] = useState(false);
+
+  const theme = useMantineTheme();
+  const { classes } = useStyles();
   const form = useForm({
     initialValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     },
@@ -84,13 +107,23 @@ const Register: NextPage = () => {
       </Text>
       <form onSubmit={form.onSubmit(() => void null)}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-          <Stack>
-            <TextInput
-              label="Name"
-              placeholder="Peter Parker"
-              withAsterisk
-              {...form.getInputProps("name")}
-            />
+          <Stack spacing={theme.spacing.md}>
+            <Box className={classes.nameInputsContainer}>
+              <TextInput
+                label="First Name"
+                placeholder="Peter"
+                withAsterisk
+                className={classes.nameInput}
+                {...form.getInputProps("firstName")}
+              />
+              <Space w={theme.spacing.sm} h={theme.spacing.md} />
+              <TextInput
+                label="Last Name"
+                placeholder="Parker"
+                className={classes.nameInput}
+                {...form.getInputProps("lastName")}
+              />
+            </Box>
             <TextInput
               label="Email"
               placeholder="you@email.com"
