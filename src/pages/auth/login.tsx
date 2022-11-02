@@ -18,7 +18,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import { login } from "../../services/auth";
 import { useAuthStore } from "../../stores";
-import { showNotification } from "@mantine/notifications";
+import { showNotification } from "../../utils";
 import { getErrorMessage } from "../../utils";
 
 const schema = z.object({
@@ -50,9 +50,8 @@ const Login: NextPage = () => {
       });
     } catch (err: any) {
       showNotification({
-        title: "Error",
         message: getErrorMessage(err),
-        color: "red",
+        type: "danger",
       });
     }
     setIsLoggingIn(false);

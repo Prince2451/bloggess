@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { register } from "../../services/auth";
-import { showNotification } from "@mantine/notifications";
+import { showNotification } from "../../utils";
 import { getErrorMessage } from "../../utils";
 import { useRouter } from "next/router";
 
@@ -97,16 +97,14 @@ const Register: NextPage = () => {
     try {
       await register(values);
       showNotification({
-        title: "Success",
         message: "User created successfully",
-        color: "green",
+        type: "success",
       });
       router.push("/auth/login");
     } catch (err: any) {
       showNotification({
-        title: "Error",
         message: getErrorMessage(err),
-        color: "red",
+        type: "danger",
       });
     }
     setIsRegistering(false);
