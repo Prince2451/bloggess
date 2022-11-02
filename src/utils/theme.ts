@@ -22,6 +22,7 @@ const mantineTheme: MantineThemeOverride = {
       },
     },
   },
+  primaryColor: "pink",
 };
 
 export { mantineTheme };
