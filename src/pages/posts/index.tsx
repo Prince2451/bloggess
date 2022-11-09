@@ -1,12 +1,13 @@
 import { DataTable, DataTableColumn } from "mantine-datatable";
-import { NextPage } from "next";
 import React, { useState } from "react";
 import { Post } from "../../types/elements/auth";
 import { Badge, BadgeProps } from "@mantine/core";
 import { capitalize } from "lodash";
 import { useRouter } from "next/router";
+import withAuth from "../../hoc/withAuth";
+import { NextPageWithLayout } from "../../types/utils";
 
-const Posts: NextPage = () => {
+const Posts: NextPageWithLayout = () => {
   const [page, setPage] = useState(1);
   const router = useRouter();
 
@@ -83,4 +84,4 @@ const Posts: NextPage = () => {
   );
 };
 
-export default Posts;
+export default withAuth(Posts);

@@ -1,4 +1,3 @@
-import { AppProps } from "next/app";
 import Head from "next/head";
 import {
   AppShell,
@@ -13,9 +12,12 @@ import { IconHome, IconNews } from "@tabler/icons";
 import { mantineTheme } from "../utils";
 import GlobalStyles from "../components/global-styles";
 import { NotificationsProvider } from "@mantine/notifications";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppPropsWithLayout } from "../types/utils";
 
-export default function App(props: AppProps<{ layout?: "admin" }>) {
+export default function App(props: AppPropsWithLayout) {
   const { Component, pageProps } = props;
+
   const [isOpen, handlers] = useDisclosure(false);
   const [colorScheme, toggleColorScheme] = useToggle([
     "light",
@@ -69,14 +71,14 @@ export default function App(props: AppProps<{ layout?: "admin" }>) {
               <GlobalStyles />
               <AppShell
                 header={
-                  pageProps.layout === "admin" ? (
+                  Component.layout === "admin" ? (
                     <AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />
                   ) : (
                     <></>
                   )
                 }
                 navbar={
-                  pageProps.layout === "admin" ? (
+                  Component.layout === "admin" ? (
                     <AdminNavbar isOpen={isOpen} links={links} />
                   ) : (
                     <></>
