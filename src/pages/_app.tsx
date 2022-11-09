@@ -50,46 +50,48 @@ export default function App(props: AppProps<{ layout?: "admin" }>) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
-      >
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            /** Put your mantine theme override here */
-            colorScheme,
-            ...mantineTheme,
-          }}
+      <QueryClientProvider client={new QueryClient()}>
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
         >
-          <NotificationsProvider>
-            {/* for global styles */}
-            <GlobalStyles />
-            <AppShell
-              header={
-                pageProps.layout === "admin" ? (
-                  <AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />
-                ) : (
-                  <></>
-                )
-              }
-              navbar={
-                pageProps.layout === "admin" ? (
-                  <AdminNavbar isOpen={isOpen} links={links} />
-                ) : (
-                  <></>
-                )
-              }
-              navbarOffsetBreakpoint="sm"
-            >
-              <Container size="sm" style={{ height: "100%" }}>
-                <Component {...pageProps} />
-              </Container>
-            </AppShell>
-          </NotificationsProvider>
-        </MantineProvider>
-      </ColorSchemeProvider>
+          <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            theme={{
+              /** Put your mantine theme override here */
+              colorScheme,
+              ...mantineTheme,
+            }}
+          >
+            <NotificationsProvider>
+              {/* for global styles */}
+              <GlobalStyles />
+              <AppShell
+                header={
+                  pageProps.layout === "admin" ? (
+                    <AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />
+                  ) : (
+                    <></>
+                  )
+                }
+                navbar={
+                  pageProps.layout === "admin" ? (
+                    <AdminNavbar isOpen={isOpen} links={links} />
+                  ) : (
+                    <></>
+                  )
+                }
+                navbarOffsetBreakpoint="sm"
+              >
+                <Container size="sm" style={{ height: "100%" }}>
+                  <Component {...pageProps} />
+                </Container>
+              </AppShell>
+            </NotificationsProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
+      </QueryClientProvider>
     </>
   );
 }
