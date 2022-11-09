@@ -24,6 +24,8 @@ export default function App(props: AppPropsWithLayout) {
     "dark",
   ] as const);
 
+  if (!Component.getLayout) Component.getLayout = (page) => page;
+
   const links = [
     {
       title: "Posts",
@@ -87,7 +89,7 @@ export default function App(props: AppPropsWithLayout) {
                 navbarOffsetBreakpoint="sm"
               >
                 <Container size="sm" style={{ height: "100%" }}>
-                  <Component {...pageProps} />
+                  {Component.getLayout(<Component {...pageProps} />)}
                 </Container>
               </AppShell>
             </NotificationsProvider>
