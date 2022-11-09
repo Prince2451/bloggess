@@ -11,7 +11,6 @@ import {
 import { NextPage } from "next";
 import Image from "next/legacy/image";
 import Link from "../../components/navigation/link";
-import Wrapper from "../../elements/auth/wrapper";
 import CelebrationsIcon from "../../../public/assets/icons/celebration-user.svg";
 import { z } from "zod";
 import { useForm, zodResolver } from "@mantine/form";
@@ -21,6 +20,7 @@ import { useAuthStore } from "../../stores";
 import { showNotification } from "../../utils";
 import { getErrorMessage } from "../../utils";
 import { useRouter } from "next/router";
+import Wrapper from "../../elements/auth/layout";
 
 const schema = z.object({
   email: z.string().email({ message: "Valid email address is required" }),

@@ -14,7 +14,7 @@ import {
 import { NextPage } from "next";
 import Image from "next/legacy/image";
 import Link from "../../components/navigation/link";
-import Wrapper from "../../elements/auth/wrapper";
+import Wrapper from "../../elements/auth/layout";
 import CelebrationsIcon from "../../../public/assets/icons/celebration.svg";
 import PasswordStrength from "../../elements/auth/password-strength";
 import { useEffect, useState } from "react";

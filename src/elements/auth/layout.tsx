@@ -1,12 +1,12 @@
 import { Center, Container, Title } from "@mantine/core";
 import React, { PropsWithChildren } from "react";
 
-interface WrapperProps {
+interface LayoutProps {
   title: string;
   titleIcon: React.ReactElement;
 }
 
-const Wrapper: React.FC<PropsWithChildren<WrapperProps>> = ({
+const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
   title,
   titleIcon,
   children,
@@ -23,4 +23,4 @@ const Wrapper: React.FC<PropsWithChildren<WrapperProps>> = ({
   );
 };
 
-export default Wrapper;
+export default Layout;
