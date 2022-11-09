@@ -5,11 +5,14 @@ import {
 } from "@mantine/notifications";
 import { NotificationType } from "../types/utils";
 
-const getErrorMessage = (
-  err: AxiosError<any>,
-  fallback: string = "Something went wrong"
-) => {
-  return err?.response?.data?.message || fallback;
+const getErrorMessage = (err: unknown, fallback = "Something went wrong") => {
+  let errMsg = "";
+  if (err instanceof AxiosError) {
+    errMsg = err?.response?.data?.message;
+  } else if (typeof err === "string" || typeof err === "number") {
+    errMsg = err.toString();
+  }
+  return errMsg || fallback;
 };
 
 const showNotification = ({

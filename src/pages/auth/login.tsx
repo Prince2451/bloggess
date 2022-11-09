@@ -55,7 +55,7 @@ const Login: NextPageWithLayout = () => {
         remember: values.rememberMe,
       });
       router.push("/posts");
-    } catch (err: any) {
+    } catch (err) {
       showNotification({
         message: getErrorMessage(err),
         type: "danger",

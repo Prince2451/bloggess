@@ -101,7 +101,7 @@ const Register: NextPageWithLayout = () => {
         type: "success",
       });
       router.push("/auth/login");
-    } catch (err: any) {
+    } catch (err) {
       showNotification({
         message: getErrorMessage(err),
         type: "danger",

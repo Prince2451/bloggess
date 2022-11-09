@@ -15,11 +15,8 @@ axiosInstance.interceptors.request.use(
       config.headers["Authorization"] = "Bearer " + token;
     }
     if (config.pathParams && config.url) {
-      Object.keys(config.pathParams).forEach((key) => {
-        config.url = config.url?.replace(
-          ":" + key,
-          config.pathParams![key].toString()
-        );
+      Object.entries(config.pathParams).forEach(([key, value]) => {
+        config.url = config.url?.replace(":" + key, value.toString());
       });
     }
     return config;
