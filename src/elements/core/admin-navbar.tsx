@@ -7,8 +7,10 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { IconLogout } from "@tabler/icons";
+import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import Link from "../../components/navigation/link";
+import { useAuthStore } from "../../stores";
 
 const useStyles = createStyles((theme, _, getRef) => {
   const icon = getRef("icon");
@@ -77,6 +79,13 @@ interface AdminNavbarProps {
 
 const AdminNavbar: React.FC<AdminNavbarProps> = ({ links, isOpen }) => {
   const { classes } = useStyles();
+  const setAuthDetails = useAuthStore((state) => state.setAuthDetails);
+  const queryClient = useQueryClient();
+
+  const onLogout = () => {
+    setAuthDetails(null);
+    queryClient.clear();
+  };
 
   return (
     <Navbar
@@ -106,7 +115,11 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ links, isOpen }) => {
         </List>
       </Navbar.Section>
       <Navbar.Section>
-        <UnstyledButton sx={{ width: "100%" }} className={classes.link}>
+        <UnstyledButton
+          onClick={onLogout}
+          sx={{ width: "100%" }}
+          className={classes.link}
+        >
           <IconLogout className={classes.linkIcon} />
           <Text>Logout</Text>
         </UnstyledButton>
