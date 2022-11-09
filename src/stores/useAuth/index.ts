@@ -2,7 +2,6 @@ import create from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 interface AuthState {
-  isLoggedIn: boolean;
   authDetails: {
     accessToken: string;
     refreshToken: string;
@@ -11,10 +10,9 @@ interface AuthState {
 }
 const useAuthStore = create<AuthState>()(
   immer((set) => ({
-    isLoggedIn: false,
     authDetails: null,
     setAuthDetails(authDetails) {
-      set({ authDetails, isLoggedIn: !!authDetails });
+      set({ authDetails });
     },
   }))
 );

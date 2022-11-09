@@ -1,3 +1,4 @@
+import { User } from "../types/elements/auth";
 import { axiosInstance } from "../utils";
 import apiUrls from "./apiUrls";
 
@@ -6,7 +7,7 @@ interface LoginRequest {
   password: string;
 }
 interface LoginResponse {
-  accessToken: string;
+  token: string;
   refreshToken: string;
 }
 interface RegisterRequest {
@@ -21,6 +22,7 @@ interface RegisterResponse {
   email: string;
   id: string;
 }
+type GetUserResponse = User;
 
 function login(payload: LoginRequest) {
   return axiosInstance.post<LoginResponse>(apiUrls.auth.login, payload);
@@ -30,4 +32,8 @@ function register(payload: RegisterRequest) {
   return axiosInstance.post<RegisterResponse>(apiUrls.auth.register, payload);
 }
 
-export { login, register };
+function getUser() {
+  return axiosInstance.get<GetUserResponse>(apiUrls.auth.user);
+}
+
+export { login, register, getUser };

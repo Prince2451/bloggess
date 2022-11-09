@@ -20,6 +20,7 @@ import { login } from "../../services/auth";
 import { useAuthStore } from "../../stores";
 import { showNotification } from "../../utils";
 import { getErrorMessage } from "../../utils";
+import { useRouter } from "next/router";
 
 const schema = z.object({
   email: z.string().email({ message: "Valid email address is required" }),
@@ -30,6 +31,7 @@ const Login: NextPage = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const setAuthDetails = useAuthStore((state) => state.setAuthDetails);
+  const router = useRouter();
 
   const form = useForm({
     initialValues: {
@@ -45,9 +47,10 @@ const Login: NextPage = () => {
     try {
       const { data } = await login(values);
       setAuthDetails({
-        accessToken: data.accessToken,
+        accessToken: data.token,
         refreshToken: data.refreshToken,
       });
+      router.push("/posts");
     } catch (err: any) {
       showNotification({
         message: getErrorMessage(err),
