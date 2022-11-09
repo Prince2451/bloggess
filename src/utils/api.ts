@@ -41,9 +41,8 @@ axiosInstance.interceptors.response.use(
         if (!refreshToken) throw new Error("Refresh token doesn't exists");
         const res = await axios.post<{ token: string }>(
           apiUrls.auth.refreshToken,
-          {
-            refreshToken,
-          }
+          { refreshToken },
+          { baseURL: process.env.NEXT_PUBLIC_API_BASE_URL }
         );
 
         if (res.status === 200) {
