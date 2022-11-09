@@ -20,10 +20,10 @@ const withAuth = (
     });
 
     useEffect(() => {
-      if (!isAuthenticating && !isAuthenticated) {
+      if (!authDetails || (!isAuthenticating && !isAuthenticated)) {
         router.push("/auth/login");
       }
-    }, [isAuthenticated, isAuthenticating, router]);
+    }, [authDetails, isAuthenticated, isAuthenticating, router]);
 
     if (isAuthenticating) return null; /* add loader here */
     return (
