@@ -1,6 +1,4 @@
-import { NextPage } from "next";
-import React from "react";
-import Wrapper from "../../elements/auth/layout";
+import React, { Fragment } from "react";
 import {
   Paper,
   Text,
@@ -17,6 +15,8 @@ import Image from "next/legacy/image";
 import Link from "../../components/navigation/link";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
+import Layout from "../../elements/auth/layout";
+import { NextPageWithLayout } from "../../types/utils";
 
 const useStyles = createStyles((theme) => ({
   controls: {
@@ -37,7 +37,7 @@ const schema = z.object({
   email: z.string().email({ message: "Valid email address is required" }),
 });
 
-const ForgotPassword: NextPage = () => {
+const ForgotPassword: NextPageWithLayout = () => {
   const form = useForm({
     initialValues: {
       email: "",
@@ -48,12 +48,7 @@ const ForgotPassword: NextPage = () => {
   const { classes } = useStyles();
 
   return (
-    <Wrapper
-      title="Forgot password?"
-      titleIcon={
-        <Image width={40} height={40} src={SecurityIcon} alt="security" />
-      }
-    >
+    <Fragment>
       <Text color="dimmed" size="sm" align="center">
         Enter your email to get a reset link
       </Text>
@@ -83,7 +78,20 @@ const ForgotPassword: NextPage = () => {
           </Group>
         </Paper>
       </form>
-    </Wrapper>
+    </Fragment>
+  );
+};
+
+ForgotPassword.getLayout = function (page) {
+  return (
+    <Layout
+      title="Forgot password?"
+      titleIcon={
+        <Image width={40} height={40} src={SecurityIcon} alt="security" />
+      }
+    >
+      {page}
+    </Layout>
   );
 };
 

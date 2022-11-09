@@ -8,7 +8,6 @@ import {
   Button,
   Stack,
 } from "@mantine/core";
-import { NextPage } from "next";
 import Image from "next/legacy/image";
 import Link from "../../components/navigation/link";
 import CelebrationsIcon from "../../../public/assets/icons/celebration-user.svg";
@@ -20,14 +19,15 @@ import { useAuthStore } from "../../stores";
 import { showNotification } from "../../utils";
 import { getErrorMessage } from "../../utils";
 import { useRouter } from "next/router";
-import Wrapper from "../../elements/auth/layout";
+import { NextPageWithLayout } from "../../types/utils";
+import Layout from "../../elements/auth/layout";
 
 const schema = z.object({
   email: z.string().email({ message: "Valid email address is required" }),
   password: z.string().min(1, { message: "Password must not be empty" }),
 });
 
-const Login: NextPage = () => {
+const Login: NextPageWithLayout = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const setAuthDetails = useAuthStore((state) => state.setAuthDetails);
@@ -61,7 +61,46 @@ const Login: NextPage = () => {
   };
 
   return (
-    <Wrapper
+    <form onSubmit={form.onSubmit(onSubmit)}>
+      <Text color="dimmed" size="sm" align="center" mt={5}>
+        Do not have an account yet?{" "}
+        <Link href="register" size="sm">
+          Create account
+        </Link>
+      </Text>
+
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <Stack>
+          <TextInput
+            label="Email"
+            placeholder="you@email.com"
+            withAsterisk
+            {...form.getInputProps("email")}
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Your password"
+            withAsterisk
+            {...form.getInputProps("password")}
+          />
+          <Group position="apart">
+            <Checkbox label="Remember me" />
+            <Link href="forgot-password" size="sm">
+              Forgot password?
+            </Link>
+          </Group>
+          <Button loading={isLoggingIn} type="submit" fullWidth>
+            Sign in
+          </Button>
+        </Stack>
+      </Paper>
+    </form>
+  );
+};
+
+Login.getLayout = function (page) {
+  return (
+    <Layout
       title="Welcome Back!"
       titleIcon={
         <Image
@@ -72,41 +111,8 @@ const Login: NextPage = () => {
         />
       }
     >
-      <form onSubmit={form.onSubmit(onSubmit)}>
-        <Text color="dimmed" size="sm" align="center" mt={5}>
-          Do not have an account yet?{" "}
-          <Link href="register" size="sm">
-            Create account
-          </Link>
-        </Text>
-
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-          <Stack>
-            <TextInput
-              label="Email"
-              placeholder="you@email.com"
-              withAsterisk
-              {...form.getInputProps("email")}
-            />
-            <PasswordInput
-              label="Password"
-              placeholder="Your password"
-              withAsterisk
-              {...form.getInputProps("password")}
-            />
-            <Group position="apart">
-              <Checkbox label="Remember me" />
-              <Link href="forgot-password" size="sm">
-                Forgot password?
-              </Link>
-            </Group>
-            <Button loading={isLoggingIn} type="submit" fullWidth>
-              Sign in
-            </Button>
-          </Stack>
-        </Paper>
-      </form>
-    </Wrapper>
+      {page}
+    </Layout>
   );
 };
 

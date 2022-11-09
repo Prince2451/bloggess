@@ -11,19 +11,19 @@ import {
   Space,
   useMantineTheme,
 } from "@mantine/core";
-import { NextPage } from "next";
 import Image from "next/legacy/image";
 import Link from "../../components/navigation/link";
-import Wrapper from "../../elements/auth/layout";
 import CelebrationsIcon from "../../../public/assets/icons/celebration.svg";
 import PasswordStrength from "../../elements/auth/password-strength";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { register } from "../../services/auth";
 import { showNotification } from "../../utils";
 import { getErrorMessage } from "../../utils";
 import { useRouter } from "next/router";
+import Layout from "../../elements/auth/layout";
+import { NextPageWithLayout } from "../../types/utils";
 
 const useStyles = createStyles((theme) => ({
   nameInputsContainer: {
@@ -73,7 +73,7 @@ const schema = z.object({
     }),
 });
 
-const Register: NextPage = () => {
+const Register: NextPageWithLayout = () => {
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
 
@@ -119,10 +119,7 @@ const Register: NextPage = () => {
   }, [form, popoverOpened]);
 
   return (
-    <Wrapper
-      title="Welcome Creator!"
-      titleIcon={<Image src={CelebrationsIcon} alt="celebration" />}
-    >
+    <Fragment>
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Already have an account?{" "}
         <Link href="login" size="sm">
@@ -173,7 +170,18 @@ const Register: NextPage = () => {
           </Stack>
         </Paper>
       </form>
-    </Wrapper>
+    </Fragment>
+  );
+};
+
+Register.getLayout = function (page) {
+  return (
+    <Layout
+      title="Welcome Creator!"
+      titleIcon={<Image src={CelebrationsIcon} alt="celebration" />}
+    >
+      {page}
+    </Layout>
   );
 };
 
