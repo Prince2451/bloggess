@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import React from "react";
-import Wrapper from "../../elements/auth/wrapper";
+import Wrapper from "../../elements/auth/layout";
 import {
   Paper,
   Text,
