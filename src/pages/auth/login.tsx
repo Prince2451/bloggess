@@ -30,13 +30,14 @@ const schema = z.object({
 const Login: NextPageWithLayout = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const setAuthDetails = useAuthStore((state) => state.setAuthDetails);
+  const setAuthStore = useAuthStore((state) => state.setAuthStore);
   const router = useRouter();
 
   const form = useForm({
     initialValues: {
       email: "",
       password: "",
+      rememberMe: true,
     },
     validate: zodResolver(schema),
     validateInputOnBlur: true,
@@ -46,9 +47,12 @@ const Login: NextPageWithLayout = () => {
     setIsLoggingIn(true);
     try {
       const { data } = await login(values);
-      setAuthDetails({
-        accessToken: data.token,
-        refreshToken: data.refreshToken,
+      setAuthStore({
+        authDetails: {
+          accessToken: data.token,
+          refreshToken: data.refreshToken,
+        },
+        remember: values.rememberMe,
       });
       router.push("/posts");
     } catch (err: any) {
@@ -84,7 +88,10 @@ const Login: NextPageWithLayout = () => {
             {...form.getInputProps("password")}
           />
           <Group position="apart">
-            <Checkbox label="Remember me" />
+            <Checkbox
+              label="Remember me"
+              {...form.getInputProps("rememberMe", { type: "checkbox" })}
+            />
             <Link href="forgot-password" size="sm">
               Forgot password?
             </Link>
