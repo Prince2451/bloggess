@@ -44,23 +44,28 @@ const useStyles = createStyles((theme, _, getRef) => {
       "&.active": {
         "&, &:hover": {
           backgroundColor: theme.fn.variant({
-            variant: "light",
+            variant: "filled",
             color: theme.primaryColor,
           }).background,
           color: theme.fn.variant({
-            variant: "light",
+            variant: "filled",
             color: theme.primaryColor,
           }).color,
           [`& .${icon}`]: {
             color: theme.fn.variant({
-              variant: "light",
+              variant: "filled",
               color: theme.primaryColor,
             }).color,
           },
         },
       },
     },
-
+    listItem: {
+      width: "100%",
+      "& > .mantine-List-itemWrapper": {
+        width: "100%",
+      },
+    },
     linkIcon: {
       ref: icon,
       color:
@@ -99,9 +104,9 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ links, isOpen }) => {
     >
       <Navbar.Section grow>
         <Space h="lg" />
-        <List listStyleType="none" spacing={2}>
+        <List listStyleType="none" spacing={2} mx={2}>
           {links.map((link, i) => (
-            <List.Item key={i} mx={2}>
+            <List.Item key={i} className={classes.listItem}>
               <Link
                 className={classes.link}
                 href={link.link}
