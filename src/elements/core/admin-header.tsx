@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { IconMoonStars, IconSearch, IconSun } from "@tabler/icons";
 import React from "react";
+import Link from "../../components/navigation/link";
 
 const useStyles = createStyles((theme) => ({
   hideAtSm: {
@@ -35,6 +36,18 @@ const useStyles = createStyles((theme) => ({
   search: {
     [theme.fn.largerThan("sm")]: {
       maxWidth: 500,
+    },
+  },
+  profile: {
+    display: "flex",
+    background: theme.fn.variant({ variant: "filled" }).background,
+    borderRadius: theme.radius.md,
+    color: theme.fn.variant({ variant: "filled" }).color,
+    alignItems: "center",
+    height: "100%",
+    padding: `0 ${theme.spacing.sm}px`,
+    "&:hover": {
+      textDecoration: "none",
     },
   },
 }));
@@ -69,7 +82,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggle, isOpen }) => {
           color={theme.colors.gray[6]}
           className={classes.hamburger}
         />
-        <Group sx={{ flexGrow: 1 }} position="apart">
+        <Group sx={{ flexGrow: 1, alignSelf: "stretch" }} position="apart">
           {/* for mainting center of searchbar */}
           <Space></Space>
           <Autocomplete
@@ -78,7 +91,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggle, isOpen }) => {
             rightSection={<IconSearch size={18} opacity={0.3} />}
             className={classes.search}
           />
-          <Group>
+          <Group style={{ alignSelf: "stretch" }}>
             <ActionIcon
               onClick={() => toggleColorScheme()}
               size="lg"
@@ -92,10 +105,12 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggle, isOpen }) => {
               )}
             </ActionIcon>
             <Divider className={classes.hideAtSm} orientation="vertical" />
-            <Text className={classes.hideAtSm} size="sm" weight={500}>
-              Prince Verma
-            </Text>
-            <Avatar />
+            <Link className={classes.profile} href="">
+              <Text className={classes.hideAtSm} size="sm" weight={500}>
+                Prince Verma
+              </Text>
+              <Avatar variant="filled" color="inherit" />
+            </Link>
           </Group>
         </Group>
       </Group>
