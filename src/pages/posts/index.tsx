@@ -2,6 +2,7 @@ import { DataTable, DataTableColumn } from "mantine-datatable";
 import React, { useState } from "react";
 import { Post } from "../../types/elements/auth";
 import {
+  ActionIcon,
   Badge,
   BadgeProps,
   Box,
@@ -9,6 +10,7 @@ import {
   Group,
   Paper,
   Text,
+  ThemeIcon,
   useMantineTheme,
 } from "@mantine/core";
 import { capitalize } from "lodash";
@@ -16,6 +18,7 @@ import withAuth from "../../hoc/withAuth";
 import { NextPageWithLayout } from "../../types/utils";
 import Image from "next/image";
 import dayjs from "dayjs";
+import { IconEye, IconTrash } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
   postIndex: {
@@ -111,10 +114,28 @@ const Posts: NextPageWithLayout = () => {
       ),
       accessor: "category",
     },
+    {
+      title: "Actions",
+      render: () => (
+        <Group spacing="xs">
+          <ActionIcon aria-label="View">
+            <IconEye />
+          </ActionIcon>
+          <ActionIcon aria-label="Delete">
+            <IconTrash />
+          </ActionIcon>
+        </Group>
+      ),
+      accessor: "actions",
+    },
   ];
 
   return (
-    <Paper p={theme.spacing.md} radius={theme.radius.md}>
+    <Paper
+      style={{ height: "100%" }}
+      p={theme.spacing.md}
+      radius={theme.radius.md}
+    >
       <DataTable
         columns={columns}
         records={posts}
