@@ -88,7 +88,7 @@ export default function App(props: AppPropsWithLayout) {
                 }
                 navbarOffsetBreakpoint="sm"
               >
-                <Container size="sm" style={{ height: "100%" }}>
+                <Container size="md" style={{ height: "100%" }}>
                   {Component.getLayout(<Component {...pageProps} />)}
                 </Container>
               </AppShell>
