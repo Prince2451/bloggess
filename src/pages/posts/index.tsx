@@ -10,7 +10,6 @@ import {
   Group,
   Paper,
   Text,
-  ThemeIcon,
   useMantineTheme,
 } from "@mantine/core";
 import { capitalize } from "lodash";
@@ -18,7 +17,9 @@ import withAuth from "../../hoc/withAuth";
 import { NextPageWithLayout } from "../../types/utils";
 import Image from "next/image";
 import dayjs from "dayjs";
-import { IconEye, IconTrash } from "@tabler/icons";
+import { IconEye, IconPencil, IconTrash } from "@tabler/icons";
+import Link from "../../components/navigation/link";
+import { useRouter } from "next/router";
 
 const useStyles = createStyles((theme) => ({
   postIndex: {
@@ -31,19 +32,23 @@ const useStyles = createStyles((theme) => ({
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
   },
+  tableData: {
+    width: "max-content",
+  },
 }));
 
 const Posts: NextPageWithLayout = () => {
   const [page, setPage] = useState(1);
   const { classes } = useStyles();
   const theme = useMantineTheme();
+  const router = useRouter();
 
   const posts: Array<Post> = [
     {
       category: "nature",
       coverImage: "https://source.unsplash.com/random/",
       createdOn: "2022-09-12T12:33.22",
-      id: 2,
+      id: 1,
       slug: "nature-2",
       title: "How to worl",
     },
@@ -59,7 +64,7 @@ const Posts: NextPageWithLayout = () => {
       category: "nature",
       coverImage: "https://source.unsplash.com/random/",
       createdOn: "2022-09-12T12:33.22",
-      id: 2,
+      id: 3,
       slug: "nature-2",
       title: "How to worl",
     },
@@ -82,7 +87,7 @@ const Posts: NextPageWithLayout = () => {
       title: "Title",
       accessor: "title",
       render: (post) => (
-        <Group>
+        <Group className={classes.tableData}>
           <Image
             src={post.coverImage + "?" + post.category}
             alt="Cover Image"
@@ -98,7 +103,9 @@ const Posts: NextPageWithLayout = () => {
       title: "Posted On",
       accessor: "createdOn",
       render: (post) => (
-        <Text>{dayjs(post.createdOn).format("DD MMM YYYY")}</Text>
+        <Text className={classes.tableData}>
+          {dayjs(post.createdOn).format("DD MMM YYYY")}
+        </Text>
       ),
     },
     {
@@ -116,10 +123,21 @@ const Posts: NextPageWithLayout = () => {
     },
     {
       title: "Actions",
-      render: () => (
-        <Group spacing="xs">
-          <ActionIcon aria-label="View">
+      render: (post) => (
+        <Group spacing={theme.spacing.xs / 4} className={classes.tableData}>
+          <ActionIcon
+            component={Link}
+            href={`${router.pathname}/view/${post.slug}`}
+            aria-label="View"
+          >
             <IconEye />
+          </ActionIcon>
+          <ActionIcon
+            component={Link}
+            href={`${router.pathname}/edit/${post.slug}`}
+            aria-label="Edit"
+          >
+            <IconPencil />
           </ActionIcon>
           <ActionIcon aria-label="Delete">
             <IconTrash />
