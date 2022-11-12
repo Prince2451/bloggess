@@ -95,7 +95,7 @@ const Posts: NextPageWithLayout = () => {
             height={40}
             style={{ borderRadius: theme.radius.sm }}
           />
-          <Text>{post.title}</Text>
+          <Text weight={500}>{post.title}</Text>
         </Group>
       ),
     },
@@ -149,11 +149,7 @@ const Posts: NextPageWithLayout = () => {
   ];
 
   return (
-    <Paper
-      style={{ height: "100%" }}
-      p={theme.spacing.md}
-      radius={theme.radius.md}
-    >
+    <Paper style={{ height: "100%" }} p="md" radius="md">
       <DataTable
         columns={columns}
         records={posts}
