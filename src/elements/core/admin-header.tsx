@@ -49,6 +49,24 @@ const useStyles = createStyles((theme) => ({
     "&:hover": {
       textDecoration: "none",
     },
+    [theme.fn.smallerThan("sm")]: {
+      padding: 2,
+      alignSelf: "center",
+    },
+  },
+  actions: {
+    height: "80%",
+    flexGrow: 1,
+    alignSelf: "stretch",
+    margin: "auto 0",
+    [theme.fn.smallerThan("lg")]: {
+      height: "60%",
+    },
+  },
+  hideAtLg: {
+    [theme.fn.smallerThan("lg")]: {
+      display: "none",
+    },
   },
 }));
 
@@ -69,8 +87,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggle, isOpen }) => {
         align="center"
         spacing="lg"
         position="apart"
-        px="md"
-        py="xs"
+        px="sm"
+        noWrap
       >
         <Box className={cx(classes.hideAtSm, classes.titleContainer)}>
           <Title order={3}>Blogges</Title>
@@ -82,16 +100,17 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggle, isOpen }) => {
           color={theme.colors.gray[6]}
           className={classes.hamburger}
         />
-        <Group sx={{ flexGrow: 1, alignSelf: "stretch" }} position="apart">
+        <Group className={classes.actions} position="apart" noWrap>
           {/* for mainting center of searchbar */}
           <Space></Space>
           <Autocomplete
             data={[]}
-            sx={{ flexGrow: 1 }}
+            style={{ flexGrow: 1 }}
             rightSection={<IconSearch size={18} opacity={0.3} />}
             className={classes.search}
+            placeholder="Search Posts"
           />
-          <Group style={{ alignSelf: "stretch" }}>
+          <Group style={{ alignSelf: "stretch" }} noWrap>
             <ActionIcon
               onClick={() => toggleColorScheme()}
               size="lg"
@@ -106,7 +125,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggle, isOpen }) => {
             </ActionIcon>
             <Divider className={classes.hideAtSm} orientation="vertical" />
             <Link className={classes.profile} href="">
-              <Text className={classes.hideAtSm} size="sm" weight={500}>
+              <Text className={classes.hideAtLg} size="sm" weight={500}>
                 Prince Verma
               </Text>
               <Avatar variant="filled" color="inherit" />
