@@ -1,5 +1,6 @@
 import {
   BackgroundImage,
+  Button,
   createStyles,
   Group,
   Paper,
@@ -64,6 +65,17 @@ const useStyles = createStyles((theme, params: UseStylesParams) => ({
     minHeight: "25rem",
     maxHeight: "35rem",
   },
+  actionsContainer: {
+    position: "sticky",
+    bottom: 0,
+    zIndex: 10,
+  },
+  actionButtons: {
+    justifyContent: "right",
+    [theme.fn.smallerThan("sm")]: {
+      justifyContent: "center",
+    },
+  },
 }));
 
 interface FormFields {
@@ -108,51 +120,63 @@ const PostEdit: NextPageWithLayout = () => {
     }
   };
 
+  const onSubmit = () => null;
+
   return (
-    <Paper radius="md" p="md" style={{ height: "100%" }}>
-      <Stack className={classes.postsInputsContainer} align="stretch">
-        <Group className={classes.metaInputsContainer} align="flex-start">
-          <BackgroundImage
-            src={form.values.coverImage.url}
-            className={classes.backgroundImage}
-          >
-            <Dropzone
-              title="Cover Image"
-              subTitle={`Click or Drop Image to upload allowed (png, jpeg, svg, webp)`}
-              onDrop={onDrop}
-              className={classes.dropzone}
-              accept={[
-                MIME_TYPES.png,
-                MIME_TYPES.jpeg,
-                MIME_TYPES.svg,
-                MIME_TYPES.webp,
-              ]}
-              maxFiles={1}
-              color="dark"
-            />
-          </BackgroundImage>
-          <Stack className={classes.metaInputs}>
-            <TextInput
-              label="Post Title"
-              placeholder="How to date on social media"
-              withAsterisk
-              name="title"
-              {...form.getInputProps("title")}
-            />
-            <Textarea
-              label="Description"
-              placeholder="My story of being dumbed on socail media"
-              autosize
-              minRows={3}
-              maxRows={4}
-              withAsterisk
-              name="description"
-              {...form.getInputProps("description")}
-            />
-          </Stack>
-        </Group>
-        <RichTextEditor className={classes.postEditor} />
-      </Stack>
+    <Paper radius="md" px="md" pt="md" style={{ height: "100%" }}>
+      <form style={{ height: "100%" }} onSubmit={form.onSubmit(onSubmit)}>
+        <Stack className={classes.postsInputsContainer} align="stretch">
+          <Group className={classes.metaInputsContainer} align="flex-start">
+            <BackgroundImage
+              src={form.values.coverImage.url}
+              className={classes.backgroundImage}
+            >
+              <Dropzone
+                title="Cover Image"
+                subTitle={`Click or Drop Image to upload allowed (png, jpeg, svg, webp)`}
+                onDrop={onDrop}
+                className={classes.dropzone}
+                accept={[
+                  MIME_TYPES.png,
+                  MIME_TYPES.jpeg,
+                  MIME_TYPES.svg,
+                  MIME_TYPES.webp,
+                ]}
+                maxFiles={1}
+                color="dark"
+              />
+            </BackgroundImage>
+            <Stack className={classes.metaInputs}>
+              <TextInput
+                label="Post Title"
+                placeholder="How to date on social media"
+                withAsterisk
+                name="title"
+                {...form.getInputProps("title")}
+              />
+              <Textarea
+                label="Description"
+                placeholder="My story of being dumbed on socail media"
+                autosize
+                minRows={3}
+                maxRows={4}
+                withAsterisk
+                name="description"
+                {...form.getInputProps("description")}
+              />
+            </Stack>
+          </Group>
+          <RichTextEditor className={classes.postEditor} />
+          <Paper radius={0} py="md" className={classes.actionsContainer}>
+            <Group className={classes.actionButtons}>
+              <Button variant="light" type="button">
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </Group>
+          </Paper>
+        </Stack>
+      </form>
     </Paper>
   );
 };
