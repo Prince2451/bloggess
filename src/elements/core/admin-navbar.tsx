@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import Link from "../../components/navigation/link";
 import { useAuthStore } from "../../stores";
+import { NAVBAR_WIDTH } from "../../utils";
 
 const useStyles = createStyles((theme, _, getRef) => {
   const icon = getRef("icon");
@@ -95,10 +96,7 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ links, isOpen }) => {
   return (
     <Navbar
       withBorder
-      width={{
-        sm: 200,
-        lg: 300,
-      }}
+      width={NAVBAR_WIDTH}
       hiddenBreakpoint="sm"
       hidden={!isOpen}
     >

@@ -17,6 +17,7 @@ import {
 import { IconMoonStars, IconSearch, IconSun } from "@tabler/icons";
 import React from "react";
 import Link from "../../components/navigation/link";
+import { HEADER_HEIGHT } from "../../utils";
 
 const useStyles = createStyles((theme) => ({
   hideAtSm: {
@@ -81,7 +82,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggle, isOpen }) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
-    <Header height={75}>
+    <Header height={HEADER_HEIGHT}>
       <Group
         sx={{ height: "100%" }}
         align="center"
