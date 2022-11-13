@@ -1,4 +1,5 @@
 import {
+  BackgroundImage,
   createStyles,
   Group,
   Paper,
@@ -6,12 +7,19 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
+import { FileWithPath, MIME_TYPES } from "@mantine/dropzone";
+import { useState } from "react";
 import Dropzone from "../../../components/Dropzone";
 import RichTextEditor from "../../../components/RichTextEditor";
 import withAuth from "../../../hoc/withAuth";
 import { NextPageWithLayout } from "../../../types/utils";
+import { fileToBase64, showNotification } from "../../../utils";
 
-const useStyles = createStyles((theme) => ({
+interface UseStylesParams {
+  hasImage: boolean;
+}
+
+const useStyles = createStyles((theme, params: UseStylesParams) => ({
   postsInputsContainer: {
     width: "100%",
     height: "100%",
@@ -22,16 +30,27 @@ const useStyles = createStyles((theme) => ({
       flexWrap: "wrap",
     },
   },
+  backgroundImage: {
+    [theme.fn.largerThan("md")]: {
+      width: "33% !important",
+    },
+  },
   dropzone: {
-    width: "33%",
+    background: params.hasImage ? "transparent" : undefined,
     "& .dropzone-inner-group": {
       minHeight: "10rem",
       [theme.fn.smallerThan("md")]: {
         minHeight: "6rem",
       },
     },
-    [theme.fn.smallerThan("md")]: {
-      width: "100%",
+    "&:hover": {
+      opacity: params.hasImage ? 0.75 : 1,
+    },
+    "&[data-idle] .dropzone-inner-group": {
+      opacity: params.hasImage ? 0 : 1,
+    },
+    "&[data-idle]:hover .dropzone-inner-group": {
+      opacity: 1,
     },
   },
   metaInputs: {
@@ -48,18 +67,47 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const PostEdit: NextPageWithLayout = () => {
-  const { classes } = useStyles();
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const { classes } = useStyles({
+    hasImage: !!selectedFile,
+  });
+
+  const onDrop = async (files: FileWithPath[]) => {
+    try {
+      const url = await fileToBase64(files[0]);
+      setSelectedFile(url);
+    } catch (err) {
+      showNotification({
+        message: "Cannot process image",
+        type: "danger",
+      });
+    }
+  };
 
   return (
     <Paper radius="md" p="md" style={{ height: "100%" }}>
       <Stack className={classes.postsInputsContainer} align="stretch">
         <Group className={classes.metaInputsContainer} align="flex-start">
-          <Dropzone
-            title="Cover Image"
-            subTitle="Click or Drop Image to upload"
-            onDrop={() => null}
-            className={classes.dropzone}
-          />
+          <BackgroundImage
+            src={selectedFile || ""}
+            className={classes.backgroundImage}
+          >
+            <Dropzone
+              title="Cover Image"
+              subTitle={`Click or Drop Image to upload allowed (png, jpeg, svg, webp)`}
+              onDrop={onDrop}
+              className={classes.dropzone}
+              accept={[
+                MIME_TYPES.png,
+                MIME_TYPES.jpeg,
+                MIME_TYPES.svg,
+                MIME_TYPES.webp,
+              ]}
+              maxFiles={1}
+              color="dark"
+            />
+          </BackgroundImage>
+          {/* <BackgroundImage src={selectedFile || ""}></BackgroundImage> */}
           <Stack className={classes.metaInputs}>
             <TextInput
               label="Post Title"
