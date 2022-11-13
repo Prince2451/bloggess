@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { FileWithPath, MIME_TYPES } from "@mantine/dropzone";
-import { useState } from "react";
+import { useForm } from "@mantine/form";
 import Dropzone from "../../../components/Dropzone";
 import RichTextEditor from "../../../components/RichTextEditor";
 import withAuth from "../../../hoc/withAuth";
@@ -66,16 +66,40 @@ const useStyles = createStyles((theme, params: UseStylesParams) => ({
   },
 }));
 
+interface FormFields {
+  title: string;
+  description: string;
+  coverImage: {
+    value: File | null;
+    url: string;
+  };
+  content: string;
+}
+
 const PostEdit: NextPageWithLayout = () => {
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const form = useForm<FormFields>({
+    initialValues: {
+      title: "",
+      description: "",
+      coverImage: {
+        value: null,
+        url: "",
+      },
+      content: "",
+    },
+  });
   const { classes } = useStyles({
-    hasImage: !!selectedFile,
+    hasImage: !!form.values.coverImage.url,
   });
 
   const onDrop = async (files: FileWithPath[]) => {
     try {
       const url = await fileToBase64(files[0]);
-      setSelectedFile(url);
+
+      form.setFieldValue("coverImage", {
+        url,
+        value: files[0],
+      });
     } catch (err) {
       showNotification({
         message: "Cannot process image",
@@ -89,7 +113,7 @@ const PostEdit: NextPageWithLayout = () => {
       <Stack className={classes.postsInputsContainer} align="stretch">
         <Group className={classes.metaInputsContainer} align="flex-start">
           <BackgroundImage
-            src={selectedFile || ""}
+            src={form.values.coverImage.url}
             className={classes.backgroundImage}
           >
             <Dropzone
@@ -107,12 +131,13 @@ const PostEdit: NextPageWithLayout = () => {
               color="dark"
             />
           </BackgroundImage>
-          {/* <BackgroundImage src={selectedFile || ""}></BackgroundImage> */}
           <Stack className={classes.metaInputs}>
             <TextInput
               label="Post Title"
               placeholder="How to date on social media"
               withAsterisk
+              name="title"
+              {...form.getInputProps("title")}
             />
             <Textarea
               label="Description"
@@ -121,6 +146,8 @@ const PostEdit: NextPageWithLayout = () => {
               minRows={3}
               maxRows={4}
               withAsterisk
+              name="description"
+              {...form.getInputProps("description")}
             />
           </Stack>
         </Group>
