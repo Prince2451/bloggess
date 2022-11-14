@@ -1,4 +1,4 @@
-import { Paper } from "@mantine/core";
+import Layout from "../../../elements/posts/layout";
 import PostForm from "../../../elements/posts/post-form";
 import withAuth from "../../../hoc/withAuth";
 import { NextPageWithLayout } from "../../../types/utils";
@@ -8,11 +8,7 @@ const PostEdit: NextPageWithLayout = () => {
 };
 
 PostEdit.getLayout = (page) => {
-  return (
-    <Paper radius="md" px="md" pt="md" style={{ height: "100%" }}>
-      {page}
-    </Paper>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export default withAuth(PostEdit);
