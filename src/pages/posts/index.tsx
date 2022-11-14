@@ -6,10 +6,14 @@ import {
   Badge,
   BadgeProps,
   Box,
+  Button,
   createStyles,
+  Divider,
   Group,
   Paper,
+  Stack,
   Text,
+  Title,
   useMantineTheme,
 } from "@mantine/core";
 import { capitalize } from "lodash";
@@ -150,15 +154,30 @@ const Posts: NextPageWithLayout = () => {
 
   return (
     <Paper style={{ height: "100%" }} p="md" radius="md">
-      <DataTable
-        columns={columns}
-        records={posts}
-        page={page}
-        onPageChange={setPage}
-        recordsPerPage={10}
-        totalRecords={posts.length}
-        verticalSpacing={theme.spacing.sm}
-      />
+      <Stack align="stretch" style={{ height: "100%" }}>
+        <Group position="apart">
+          <Title weight={600} order={4}>
+            Your Posts
+          </Title>
+          <Button
+            href={`${router.pathname}/new`}
+            component={Link}
+            underline={false}
+          >
+            Create New
+          </Button>
+        </Group>
+        <Divider />
+        <DataTable
+          columns={columns}
+          records={posts}
+          page={page}
+          onPageChange={setPage}
+          recordsPerPage={10}
+          totalRecords={posts.length}
+          verticalSpacing={theme.spacing.sm}
+        />
+      </Stack>
     </Paper>
   );
 };
