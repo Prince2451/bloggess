@@ -22,3 +22,11 @@ export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<
 export type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  totalLength: number;
+  totalPage: number;
+  currentPage: number;
+  currentLength: number;
+}
