@@ -47,7 +47,7 @@ const Posts: NextPageWithLayout = () => {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const router = useRouter();
-  const { posts, isLoading } = usePosts({ page: 1, size: 10 });
+  const { posts, isLoading } = usePosts({ page: page, size: 10 });
 
   const badgeColors: Record<string, BadgeProps["color"]> = {
     nature: "green",
