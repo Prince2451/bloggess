@@ -1,6 +1,5 @@
 import { DataTable, DataTableColumn } from "mantine-datatable";
 import React, { useState } from "react";
-import { Post } from "../../types/elements/auth";
 import {
   ActionIcon,
   Badge,
@@ -24,6 +23,8 @@ import dayjs from "dayjs";
 import { IconEye, IconPencil, IconTrash } from "@tabler/icons";
 import Link from "../../components/navigation/link";
 import { useRouter } from "next/router";
+import { usePosts } from "../../query/posts";
+import { Post } from "../../types/elements/posts";
 
 const useStyles = createStyles((theme) => ({
   postIndex: {
@@ -46,33 +47,7 @@ const Posts: NextPageWithLayout = () => {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const router = useRouter();
-
-  const posts: Array<Post> = [
-    {
-      category: "nature",
-      coverImage: "https://source.unsplash.com/random/",
-      createdOn: "2022-09-12T12:33.22",
-      id: 1,
-      slug: "nature-2",
-      title: "How to worl",
-    },
-    {
-      category: "engineering",
-      coverImage: "https://source.unsplash.com/random/",
-      createdOn: "2022-09-12T12:33.22",
-      id: 2,
-      slug: "nature-2",
-      title: "How to worl",
-    },
-    {
-      category: "nature",
-      coverImage: "https://source.unsplash.com/random/",
-      createdOn: "2022-09-12T12:33.22",
-      id: 3,
-      slug: "nature-2",
-      title: "How to worl",
-    },
-  ];
+  const { posts, isLoading } = usePosts({ page: 1, size: 10 });
 
   const badgeColors: Record<string, BadgeProps["color"]> = {
     nature: "green",
@@ -93,7 +68,7 @@ const Posts: NextPageWithLayout = () => {
       render: (post) => (
         <Group className={classes.tableData}>
           <Image
-            src={post.coverImage + "?" + post.category}
+            src={post.coverImage.base64url}
             alt="Cover Image"
             width={40}
             height={40}
@@ -108,7 +83,7 @@ const Posts: NextPageWithLayout = () => {
       accessor: "createdOn",
       render: (post) => (
         <Text className={classes.tableData}>
-          {dayjs(post.createdOn).format("DD MMM YYYY")}
+          {dayjs(post.createdAt).format("DD MMM YYYY")}
         </Text>
       ),
     },
@@ -118,9 +93,9 @@ const Posts: NextPageWithLayout = () => {
         <Badge
           size="md"
           variant="filled"
-          color={badgeColors[post.category] || "gray"}
+          color={badgeColors[post.categories[0]] || "gray"}
         >
-          {capitalize(post.category)}
+          {capitalize(post.categories[0])}
         </Badge>
       ),
       accessor: "category",
@@ -176,6 +151,7 @@ const Posts: NextPageWithLayout = () => {
           recordsPerPage={10}
           totalRecords={posts.length}
           verticalSpacing={theme.spacing.sm}
+          fetching={isLoading}
         />
       </Stack>
     </Paper>
