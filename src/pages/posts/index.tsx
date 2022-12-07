@@ -47,7 +47,10 @@ const Posts: NextPageWithLayout = () => {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const router = useRouter();
-  const { posts, isLoading } = usePosts({ page: page, size: 10 });
+  const { posts, totalCount, isLoading } = usePosts({
+    page: page,
+    size: 10,
+  });
 
   const badgeColors: Record<string, BadgeProps["color"]> = {
     nature: "green",
@@ -149,7 +152,7 @@ const Posts: NextPageWithLayout = () => {
           page={page}
           onPageChange={setPage}
           recordsPerPage={10}
-          totalRecords={posts.length}
+          totalRecords={totalCount}
           verticalSpacing={theme.spacing.sm}
           fetching={isLoading}
         />
