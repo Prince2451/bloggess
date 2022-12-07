@@ -23,6 +23,8 @@ function usePosts(
 
   return {
     posts: data?.data || [],
+    totalCount: data?.totalLength || 0,
+    totalPage: data?.totalPage || 1,
     ...rest,
   };
 }
