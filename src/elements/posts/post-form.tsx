@@ -4,18 +4,21 @@ import {
   Button,
   createStyles,
   Group,
+  Input,
   Paper,
   Stack,
   Textarea,
   TextInput,
 } from "@mantine/core";
 import { FileWithPath, MIME_TYPES } from "@mantine/dropzone";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import Dropzone from "../../components/Dropzone";
 import RichTextEditor from "../../components/RichTextEditor";
 import { fileToBase64, showNotification } from "../../utils";
 import { PostFormFields } from "../../types/elements/posts";
 import { UseFormInput } from "@mantine/form/lib/types";
+import { z } from "zod";
+import { useDidUpdate } from "@mantine/hooks";
 
 interface UseStylesParams {
   hasImage: boolean;
@@ -79,6 +82,19 @@ const useStyles = createStyles((theme, params: UseStylesParams) => ({
   },
 }));
 
+const schema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, "Title is required")
+    .max(64, "Maximum 64 characters allowed"),
+  description: z.string().trim().min(1, "Description is required"),
+  coverImage: z.object({
+    value: z.custom((data) => Boolean(data), "Cover image is required"),
+  }),
+  content: z.string().trim().min(1, "Content is required"),
+});
+
 type PostFormProps = UseFormInput<PostFormFields>;
 const PostForm: React.FC<PostFormProps> = (props) => {
   const form = useForm<PostFormFields>({
@@ -92,6 +108,7 @@ const PostForm: React.FC<PostFormProps> = (props) => {
       content: "",
     },
     validateInputOnBlur: true,
+    validate: zodResolver(schema),
     ...props,
   });
   const { classes } = useStyles({
@@ -101,7 +118,6 @@ const PostForm: React.FC<PostFormProps> = (props) => {
   const onDrop = async (files: FileWithPath[]) => {
     try {
       const url = await fileToBase64(files[0]);
-
       form.setFieldValue("coverImage", {
         url,
         value: files[0],
@@ -114,30 +130,34 @@ const PostForm: React.FC<PostFormProps> = (props) => {
     }
   };
 
-  const onSubmit = () => null;
+  useDidUpdate(() => {
+    form.validateField("coverImage.value");
+  }, [form.values.coverImage.value]);
+
   return (
     <form style={{ height: "100%" }} onSubmit={form.onSubmit(onSubmit)}>
       <Stack className={classes.postsInputsContainer} align="stretch">
         <Group className={classes.metaInputsContainer} align="flex-start">
-          <BackgroundImage
-            src={form.values.coverImage.url}
-            className={classes.backgroundImage}
-          >
-            <Dropzone
-              title="Cover Image"
-              subTitle={`Click or Drop Image to upload allowed (png, jpeg, svg, webp)`}
-              onDrop={onDrop}
-              className={classes.dropzone}
-              accept={[
-                MIME_TYPES.png,
-                MIME_TYPES.jpeg,
-                MIME_TYPES.svg,
-                MIME_TYPES.webp,
-              ]}
-              maxFiles={1}
-              color="dark"
-            />
-          </BackgroundImage>
+          <Stack className={classes.backgroundImage}>
+            <BackgroundImage src={form.values.coverImage.url}>
+              <Dropzone
+                title="Cover Image"
+                subTitle={`Click or Drop Image to upload allowed (png, jpeg, svg, webp)`}
+                onDrop={onDrop}
+                className={classes.dropzone}
+                accept={[
+                  MIME_TYPES.png,
+                  MIME_TYPES.jpeg,
+                  MIME_TYPES.svg,
+                  MIME_TYPES.webp,
+                ]}
+                maxFiles={1}
+              />
+            </BackgroundImage>
+            {form.errors["coverImage.value"] && (
+              <Input.Error>{form.errors["coverImage.value"]}</Input.Error>
+            )}
+          </Stack>
           <Stack className={classes.metaInputs}>
             <TextInput
               label="Post Title"
@@ -158,13 +178,18 @@ const PostForm: React.FC<PostFormProps> = (props) => {
             />
           </Stack>
         </Group>
-        <RichTextEditor className={classes.postEditor} />
+        <RichTextEditor
+          className={classes.postEditor}
+          {...form.getInputProps("content")}
+        />
         <Paper radius={0} py="md" className={classes.actionsContainer}>
           <Group className={classes.actionButtons}>
             <Button variant="light" type="button">
               Cancel
             </Button>
-            <Button type="submit">Save</Button>
+            <Button loading={props.isLoading} type="submit">
+              Save
+            </Button>
           </Group>
         </Paper>
       </Stack>
