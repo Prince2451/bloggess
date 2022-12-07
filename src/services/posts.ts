@@ -7,8 +7,16 @@ interface GetPostsReq {
   page: number;
   size: number;
 }
-
 type GetPostsRes = PaginatedResponse<Post>;
+
+type CreatePostReq = Omit<Post, "slug" | "id" | "createdAt" | "updatedAt">;
+type CreatePostRes = Post;
+
+type UploadCoverImageReq = FormData;
+type UploadCoverImageRes = {
+  url: string;
+  base64Url: string;
+};
 
 function getPosts(payload: GetPostsReq) {
   return axiosInstance.get<GetPostsRes>(apiUrls.posts.all, {
@@ -16,4 +24,15 @@ function getPosts(payload: GetPostsReq) {
   });
 }
 
-export { getPosts };
+function createPost(payload: CreatePostReq) {
+  return axiosInstance.post<CreatePostRes>(apiUrls.posts.create, payload);
+}
+
+function uploadCoverImage(payload: UploadCoverImageReq) {
+  return axiosInstance.post<UploadCoverImageRes>(
+    apiUrls.posts.uploadCoverImage,
+    payload
+  );
+}
+
+export { getPosts, createPost, uploadCoverImage };
