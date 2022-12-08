@@ -1,13 +1,16 @@
 import dynamic from "next/dynamic";
 import type { RichTextEditorProps } from "@mantine/rte";
-import { createStyles } from "@mantine/core";
+import { Center, createStyles, Loader } from "@mantine/core";
 import hljs from "highlight.js";
 import "highlight.js/styles/tokyo-night-dark.css";
+import { useMemo } from "react";
 
 const Editor = dynamic(
   async () => {
-    const { RichTextEditor, Quill } = await import("@mantine/rte");
-    const { StyledCodeBlock } = await import("./Quill");
+    const [{ RichTextEditor, Quill }, { StyledCodeBlock }] = await Promise.all([
+      import("@mantine/rte"),
+      import("./Quill"),
+    ]);
     // registering
     Quill.register(StyledCodeBlock);
     return RichTextEditor;
@@ -16,7 +19,13 @@ const Editor = dynamic(
     // Disable during server side rendering
     ssr: false,
     // Render anything as fallback on server, e.g. loader or html content without editor
-    loading: () => null,
+    loading: () => {
+      return (
+        <Center>
+          <Loader />
+        </Center>
+      );
+    },
   }
 );
 
@@ -32,14 +41,19 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
+const RichTextEditor: React.FC<
+  Omit<RichTextEditorProps, "classNames" | "modules">
+> = (props) => {
   const { classes } = useStyles();
 
-  const modules: RichTextEditorProps["modules"] = {
-    syntax: {
-      highlight: (text: string) => hljs.highlightAuto(text).value,
-    },
-  };
+  const modules: RichTextEditorProps["modules"] = useMemo(
+    () => ({
+      syntax: {
+        highlight: (text: string) => hljs.highlightAuto(text).value,
+      },
+    }),
+    []
+  );
   return <Editor classNames={classes} modules={modules} {...props} />;
 };
 
