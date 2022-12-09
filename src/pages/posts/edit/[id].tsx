@@ -4,7 +4,8 @@ import withAuth from "../../../hoc/withAuth";
 import { NextPageWithLayout } from "../../../types/utils";
 
 const PostEdit: NextPageWithLayout = () => {
-  return <PostForm />;
+  const onSubmit = () => null;
+  return <PostForm onSubmit={onSubmit} isLoading={false} />;
 };
 
 PostEdit.getLayout = (page) => {

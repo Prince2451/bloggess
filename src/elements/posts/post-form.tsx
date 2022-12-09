@@ -95,7 +95,11 @@ const schema = z.object({
   content: z.string().trim().min(1, "Content is required"),
 });
 
-type PostFormProps = UseFormInput<PostFormFields>;
+interface PostFormProps extends UseFormInput<PostFormFields> {
+  onSubmit: (values: PostFormFields) => void;
+  isLoading: boolean;
+}
+
 const PostForm: React.FC<PostFormProps> = (props) => {
   const form = useForm<PostFormFields>({
     initialValues: {
@@ -111,6 +115,7 @@ const PostForm: React.FC<PostFormProps> = (props) => {
     validate: zodResolver(schema),
     ...props,
   });
+
   const { classes } = useStyles({
     hasImage: !!form.values.coverImage.url,
   });
@@ -135,7 +140,7 @@ const PostForm: React.FC<PostFormProps> = (props) => {
   }, [form.values.coverImage.value]);
 
   return (
-    <form style={{ height: "100%" }} onSubmit={form.onSubmit(onSubmit)}>
+    <form style={{ height: "100%" }} onSubmit={form.onSubmit(props.onSubmit)}>
       <Stack className={classes.postsInputsContainer} align="stretch">
         <Group className={classes.metaInputsContainer} align="flex-start">
           <Stack className={classes.backgroundImage}>
