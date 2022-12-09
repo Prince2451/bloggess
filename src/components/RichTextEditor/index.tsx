@@ -1,9 +1,10 @@
 import dynamic from "next/dynamic";
 import type { RichTextEditorProps } from "@mantine/rte";
-import { Center, createStyles, Loader } from "@mantine/core";
+import { createStyles } from "@mantine/core";
 import hljs from "highlight.js";
 import "highlight.js/styles/tokyo-night-dark.css";
 import { useMemo } from "react";
+import EditorLoading from "./Loading";
 
 const Editor = dynamic(
   async () => {
@@ -19,18 +20,14 @@ const Editor = dynamic(
     // Disable during server side rendering
     ssr: false,
     // Render anything as fallback on server, e.g. loader or html content without editor
-    loading: () => {
-      return (
-        <Center>
-          <Loader />
-        </Center>
-      );
-    },
+    loading: (props) => <EditorLoading {...props} />,
   }
 );
 
 const useStyles = createStyles((theme) => ({
   root: {
+    display: "flex",
+    flexDirection: "column",
     "& pre.bloggess-code-block": {
       backgroundColor: theme.colors.dark[8],
       color: theme.white,
