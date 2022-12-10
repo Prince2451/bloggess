@@ -8,6 +8,7 @@ import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
+import { IconSourceCode } from "@tabler/icons";
 
 const content =
   '<h2 style="text-align: center;">Welcome to Mantine rich text editor</h2><p><code>Editor</code> component focuses on usability and is designed to be as simple as possible to bring a familiar editing experience to regular users. <code>Editor</code> is based on <a href="https://tiptap.dev/" rel="noopener noreferrer" target="_blank">Tiptap.dev</a> and supports all of its features:</p><ul><li>General text formatting: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strike-through</s> </li><li>Headings (h1-h6)</li><li>Sub and super scripts (<sup>&lt;sup /&gt;</sup> and <sub>&lt;sub /&gt;</sub> tags)</li><li>Ordered and bullet lists</li><li>Text align&nbsp;</li><li>And all <a href="https://tiptap.dev/extensions" target="_blank" rel="noopener noreferrer">other extensions</a></li></ul>';
@@ -37,6 +38,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = () => {
           <Editor.ClearFormatting />
           <Editor.Highlight />
           <Editor.Code />
+          <Editor.CodeBlock
+            icon={({ size }) => <IconSourceCode size={size} stroke={1.5} />}
+          />
         </Editor.ControlsGroup>
 
         <Editor.ControlsGroup>
