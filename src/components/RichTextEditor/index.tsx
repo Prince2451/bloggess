@@ -51,7 +51,12 @@ const RichTextEditor: React.FC<
       Link,
       Highlight,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
-      CodeBlockLowlight.configure({ lowlight }),
+      CodeBlockLowlight.configure({
+        lowlight,
+        HTMLAttributes: {
+          spellcheck: false,
+        },
+      }),
     ],
     content,
   });
