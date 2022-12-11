@@ -92,7 +92,10 @@ const schema = z.object({
   coverImage: z.object({
     value: z.custom((data) => Boolean(data), "Cover image is required"),
   }),
-  content: z.string().trim().min(1, "Content is required"),
+  content: z.custom(
+    (data) => (typeof data === "string" ? data && data !== "<p></p>" : false),
+    { message: "Content is required" }
+  ),
 });
 
 interface PostFormProps extends UseFormInput<PostFormFields> {
@@ -185,7 +188,12 @@ const PostForm: React.FC<PostFormProps> = (props) => {
         </Group>
         <RichTextEditor
           className={classes.postEditor}
-          {...form.getInputProps("content")}
+          content={form.values.content}
+          onUpdate={(val) => form.setFieldValue("content", val)}
+          inputWrapperProps={{
+            label: "Content",
+            ...form.getInputProps("content"),
+          }}
         />
         <Paper radius={0} py="md" className={classes.actionsContainer}>
           <Group className={classes.actionButtons}>
