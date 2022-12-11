@@ -14,6 +14,7 @@ import { CodeBlock } from "./Controls";
 import { createStyles, Input, InputWrapperProps } from "@mantine/core";
 import "highlight.js/styles/github-dark.css";
 import { useEffect } from "react";
+import { HEADER_HEIGHT } from "../../utils";
 
 interface RichTextEditorProps
   extends Omit<EditorProps, "withCodeHighlightStyles" | "editor" | "children"> {
@@ -80,7 +81,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         className={cx(classes.textEditor, props.className)}
         editor={editor}
       >
-        <Editor.Toolbar sticky stickyOffset={60}>
+        <Editor.Toolbar sticky stickyOffset={HEADER_HEIGHT}>
           <Editor.ControlsGroup>
             <Editor.Bold />
             <Editor.Italic />
