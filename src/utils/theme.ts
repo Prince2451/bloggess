@@ -21,6 +21,18 @@ const mantineTheme: MantineThemeOverride = {
         };
       },
     },
+    MultiSelect: {
+      styles(theme) {
+        return {
+          value: {
+            ...theme.fn.variant({ variant: "filled" }),
+          },
+          defaultValueRemove: {
+            color: "inherit",
+          },
+        };
+      },
+    },
   },
   primaryColor: "pink",
 };
