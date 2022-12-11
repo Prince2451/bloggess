@@ -11,14 +11,16 @@ import TextAlign from "@tiptap/extension-text-align";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { lowlight } from "lowlight";
 import { CodeBlock } from "./Controls";
-import { createStyles } from "@mantine/core";
+import { createStyles, Input, InputWrapperProps } from "@mantine/core";
 import "highlight.js/styles/github-dark.css";
+import { useEffect } from "react";
 
-const content =
-  '<h2 style="text-align: center;">Welcome to Mantine rich text editor</h2><p><code>Editor</code> component focuses on usability and is designed to be as simple as possible to bring a familiar editing experience to regular users. <code>Editor</code> is based on <a href="https://tiptap.dev/" rel="noopener noreferrer" target="_blank">Tiptap.dev</a> and supports all of its features:</p><ul><li>General text formatting: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strike-through</s> </li><li>Headings (h1-h6)</li><li>Sub and super scripts (<sup>&lt;sup /&gt;</sup> and <sub>&lt;sub /&gt;</sub> tags)</li><li>Ordered and bullet lists</li><li>Text align&nbsp;</li><li>And all <a href="https://tiptap.dev/extensions" target="_blank" rel="noopener noreferrer">other extensions</a></li></ul>';
-
-type RichTextEditorProps = EditorProps;
-
+interface RichTextEditorProps
+  extends Omit<EditorProps, "withCodeHighlightStyles" | "editor" | "children"> {
+  content: string;
+  inputWrapperProps?: Omit<InputWrapperProps, "children">;
+  onUpdate?: (html: string) => void;
+}
 const useStyles = createStyles((theme) => ({
   textEditor: {
     "& .mantine-RichTextEditor-content": {
@@ -40,9 +42,12 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const RichTextEditor: React.FC<
-  Omit<RichTextEditorProps, "withCodeHighlightStyles" | "editor">
-> = (props) => {
+const RichTextEditor: React.FC<RichTextEditorProps> = ({
+  content,
+  inputWrapperProps,
+  onUpdate,
+  ...props
+}) => {
   const { classes, cx } = useStyles();
   const editor = useEditor({
     extensions: [
@@ -61,54 +66,62 @@ const RichTextEditor: React.FC<
     content,
   });
 
+  useEffect(() => {
+    editor?.on("blur", (e) => {
+      onUpdate?.(e.editor.getHTML());
+    });
+  }, [editor, onUpdate]);
+
   return (
-    <Editor
-      {...props}
-      withCodeHighlightStyles={false}
-      className={cx(classes.textEditor, props.className)}
-      editor={editor}
-    >
-      <Editor.Toolbar sticky stickyOffset={60}>
-        <Editor.ControlsGroup>
-          <Editor.Bold />
-          <Editor.Italic />
-          <Editor.Underline />
-          <Editor.Strikethrough />
-          <Editor.ClearFormatting />
-          <Editor.Highlight />
-          <Editor.Code />
-          <CodeBlock />
-        </Editor.ControlsGroup>
+    <Input.Wrapper withAsterisk label="w" {...inputWrapperProps}>
+      <Editor
+        {...props}
+        withCodeHighlightStyles={false}
+        className={cx(classes.textEditor, props.className)}
+        editor={editor}
+      >
+        <Editor.Toolbar sticky stickyOffset={60}>
+          <Editor.ControlsGroup>
+            <Editor.Bold />
+            <Editor.Italic />
+            <Editor.Underline />
+            <Editor.Strikethrough />
+            <Editor.ClearFormatting />
+            <Editor.Highlight />
+            <Editor.Code />
+            <CodeBlock />
+          </Editor.ControlsGroup>
 
-        <Editor.ControlsGroup>
-          <Editor.H1 />
-          <Editor.H2 />
-          <Editor.H3 />
-          <Editor.H4 />
-        </Editor.ControlsGroup>
+          <Editor.ControlsGroup>
+            <Editor.H1 />
+            <Editor.H2 />
+            <Editor.H3 />
+            <Editor.H4 />
+          </Editor.ControlsGroup>
 
-        <Editor.ControlsGroup>
-          <Editor.Blockquote />
-          <Editor.Hr />
-          <Editor.BulletList />
-          <Editor.OrderedList />
-        </Editor.ControlsGroup>
+          <Editor.ControlsGroup>
+            <Editor.Blockquote />
+            <Editor.Hr />
+            <Editor.BulletList />
+            <Editor.OrderedList />
+          </Editor.ControlsGroup>
 
-        <Editor.ControlsGroup>
-          <Editor.Link />
-          <Editor.Unlink />
-        </Editor.ControlsGroup>
+          <Editor.ControlsGroup>
+            <Editor.Link />
+            <Editor.Unlink />
+          </Editor.ControlsGroup>
 
-        <Editor.ControlsGroup>
-          <Editor.AlignLeft />
-          <Editor.AlignCenter />
-          <Editor.AlignJustify />
-          <Editor.AlignRight />
-        </Editor.ControlsGroup>
-      </Editor.Toolbar>
+          <Editor.ControlsGroup>
+            <Editor.AlignLeft />
+            <Editor.AlignCenter />
+            <Editor.AlignJustify />
+            <Editor.AlignRight />
+          </Editor.ControlsGroup>
+        </Editor.Toolbar>
 
-      <Editor.Content />
-    </Editor>
+        <Editor.Content />
+      </Editor>
+    </Input.Wrapper>
   );
 };
 
