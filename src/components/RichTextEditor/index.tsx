@@ -76,6 +76,7 @@ const RichTextEditor: React.FC<
           <Editor.Strikethrough />
           <Editor.ClearFormatting />
           <Editor.Highlight />
+          <Editor.Code />
           <CodeBlock />
         </Editor.ControlsGroup>
 
