@@ -5,7 +5,9 @@ import {
   createStyles,
   Group,
   Input,
+  MultiSelect,
   Paper,
+  Select,
   Stack,
   Textarea,
   TextInput,
@@ -18,7 +20,7 @@ import { fileToBase64, showNotification } from "../../utils";
 import { PostFormFields } from "../../types/elements/posts";
 import { UseFormInput } from "@mantine/form/lib/types";
 import { z } from "zod";
-import { useDidUpdate } from "@mantine/hooks";
+import { useDidUpdate, useListState } from "@mantine/hooks";
 
 interface UseStylesParams {
   hasImage: boolean;
@@ -80,7 +82,18 @@ const useStyles = createStyles((theme, params: UseStylesParams) => ({
       justifyContent: "center",
     },
   },
+  select: {
+    flexGrow: 1,
+    width: "100%",
+  },
 }));
+
+const postCategories = [
+  { label: "Engineering", value: "engineering" },
+  { label: "Nature", value: "nature" },
+  { label: "Social Media", value: "social-media" },
+  { label: "Other", value: "other" },
+];
 
 const schema = z.object({
   title: z
@@ -96,6 +109,8 @@ const schema = z.object({
     (data) => (typeof data === "string" ? data && data !== "<p></p>" : false),
     { message: "Content is required" }
   ),
+  categories: z.string().min(1, "Category is required"),
+  tags: z.array(z.string()).nonempty("At least one tag is required"),
 });
 
 interface PostFormProps extends UseFormInput<PostFormFields> {
@@ -104,6 +119,7 @@ interface PostFormProps extends UseFormInput<PostFormFields> {
 }
 
 const PostForm: React.FC<PostFormProps> = (props) => {
+  const [tags, tagsHandlers] = useListState(postCategories);
   const form = useForm<PostFormFields>({
     initialValues: {
       title: "",
@@ -113,6 +129,8 @@ const PostForm: React.FC<PostFormProps> = (props) => {
         url: "",
       },
       content: "",
+      categories: "",
+      tags: [],
     },
     validateInputOnBlur: true,
     validate: zodResolver(schema),
@@ -185,6 +203,30 @@ const PostForm: React.FC<PostFormProps> = (props) => {
               {...form.getInputProps("description")}
             />
           </Stack>
+        </Group>
+        <Group className={classes.metaInputsContainer} align="flex-start">
+          <Select
+            data={postCategories}
+            name="categories"
+            label="Category"
+            className={classes.select}
+            {...form.getInputProps("categories")}
+          />
+          <MultiSelect
+            data={tags}
+            name="tags"
+            label="Tags"
+            className={classes.select}
+            getCreateLabel={(query) => `Create '${query}' tag`}
+            onCreate={(query) => {
+              const item = { value: query, label: query };
+              tagsHandlers.append(item);
+              return item;
+            }}
+            searchable
+            creatable
+            {...form.getInputProps("tags")}
+          />
         </Group>
         <RichTextEditor
           className={classes.postEditor}

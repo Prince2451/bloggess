@@ -6,6 +6,8 @@ export interface PostFormFields {
     url: string;
   };
   content: string;
+  categories: string;
+  tags: string[];
 }
 
 export interface Post {
