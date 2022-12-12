@@ -209,6 +209,7 @@ const PostForm: React.FC<PostFormProps> = (props) => {
             data={postCategories}
             name="categories"
             label="Category"
+            placeholder="Select..."
             className={classes.select}
             {...form.getInputProps("categories")}
           />
@@ -225,6 +226,7 @@ const PostForm: React.FC<PostFormProps> = (props) => {
             }}
             searchable
             creatable
+            placeholder="food, awesome, etc."
             {...form.getInputProps("tags")}
           />
         </Group>
