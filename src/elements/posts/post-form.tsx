@@ -105,10 +105,9 @@ const schema = z.object({
   coverImage: z.object({
     value: z.custom((data) => Boolean(data), "Cover image is required"),
   }),
-  content: z.custom(
-    (data) => (typeof data === "string" ? data && data !== "<p></p>" : false),
-    { message: "Content is required" }
-  ),
+  content: z.custom((data) => (typeof data === "string" ? !!data : false), {
+    message: "Content is required",
+  }),
   categories: z.string().min(1, "Category is required"),
   tags: z.array(z.string()).nonempty("At least one tag is required"),
 });
