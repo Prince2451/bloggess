@@ -22,8 +22,8 @@ function useAddPosts() {
         url: data.url,
       },
       description: payload.description,
-      tags: [],
-      categories: ["unknown"],
+      tags: payload.tags,
+      categories: [payload.categories],
     });
   }
 
