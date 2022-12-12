@@ -114,6 +114,7 @@ const schema = z.object({
 
 interface PostFormProps extends UseFormInput<PostFormFields> {
   onSubmit: (values: PostFormFields) => void;
+  onCancel: () => void;
   isLoading: boolean;
 }
 
@@ -240,7 +241,7 @@ const PostForm: React.FC<PostFormProps> = (props) => {
         />
         <Paper radius={0} py="md" className={classes.actionsContainer}>
           <Group className={classes.actionButtons}>
-            <Button variant="light" type="button">
+            <Button onClick={props.onCancel} variant="light" type="button">
               Cancel
             </Button>
             <Button loading={props.isLoading} type="submit">
