@@ -109,14 +109,14 @@ const Posts: NextPageWithLayout = () => {
         <Group spacing={theme.spacing.xs / 4} className={classes.tableData}>
           <ActionIcon
             component={Link}
-            href={`${router.pathname}/view/${post.slug}`}
+            href={`${router.pathname}/view/${post.id}`}
             aria-label="View"
           >
             <IconEye />
           </ActionIcon>
           <ActionIcon
             component={Link}
-            href={`${router.pathname}/edit/${post.slug}`}
+            href={`${router.pathname}/edit/${post.id}`}
             aria-label="Edit"
           >
             <IconPencil />
