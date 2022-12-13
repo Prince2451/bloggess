@@ -103,7 +103,7 @@ const schema = z.object({
     .max(64, "Maximum 64 characters allowed"),
   description: z.string().trim().min(1, "Description is required"),
   coverImage: z.object({
-    value: z.custom((data) => Boolean(data), "Cover image is required"),
+    url: z.custom((data) => Boolean(data), "Cover image is required"),
   }),
   content: z.custom((data) => (typeof data === "string" ? !!data : false), {
     message: "Content is required",
@@ -116,6 +116,7 @@ interface PostFormProps extends UseFormInput<PostFormFields> {
   onSubmit: (values: PostFormFields) => void;
   onCancel: () => void;
   isLoading: boolean;
+  enableReinitialization?: boolean;
 }
 
 const PostForm: React.FC<PostFormProps> = (props) => {
@@ -157,8 +158,14 @@ const PostForm: React.FC<PostFormProps> = (props) => {
   };
 
   useDidUpdate(() => {
-    form.validateField("coverImage.value");
-  }, [form.values.coverImage.value]);
+    form.validateField("coverImage.url");
+  }, [form.values.coverImage.url]);
+
+  useDidUpdate(() => {
+    if (props.enableReinitialization && props.initialValues) {
+      form.setValues(props.initialValues);
+    }
+  }, [props.enableReinitialization, props.initialValues]);
 
   return (
     <form style={{ height: "100%" }} onSubmit={form.onSubmit(props.onSubmit)}>
