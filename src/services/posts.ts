@@ -18,6 +18,16 @@ type UploadCoverImageRes = {
   base64Url: string;
 };
 
+type GetPostReq = {
+  postId: Post["id"];
+};
+type GetPostRes = Post;
+
+type EditPostReq = Partial<Post> & {
+  postId: Post["id"];
+};
+type EditPostRes = Post;
+
 function getPosts(payload: GetPostsReq) {
   return axiosInstance.get<GetPostsRes>(apiUrls.posts.all, {
     params: payload,
@@ -35,4 +45,16 @@ function uploadCoverImage(payload: UploadCoverImageReq) {
   );
 }
 
-export { getPosts, createPost, uploadCoverImage };
+function getPost(payload: GetPostReq) {
+  return axiosInstance.get<GetPostRes>(apiUrls.posts.single, {
+    pathParams: { postId: payload.postId },
+  });
+}
+
+function editPost({ postId, ...payload }: EditPostReq) {
+  return axiosInstance.put<EditPostRes>(apiUrls.posts.edit, payload, {
+    pathParams: { postId },
+  });
+}
+
+export { getPosts, createPost, uploadCoverImage, getPost, editPost };

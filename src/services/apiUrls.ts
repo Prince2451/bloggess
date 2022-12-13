@@ -7,7 +7,9 @@ const apiUrls = {
   },
   posts: {
     all: "/posts",
+    single: "/posts/:postId",
     create: "/posts",
+    edit: "/posts/:postId",
     uploadCoverImage: "posts/cover-image",
   },
 };
