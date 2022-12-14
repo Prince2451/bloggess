@@ -14,6 +14,7 @@ import GlobalStyles from "../components/global-styles";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppPropsWithLayout } from "../types/utils";
+import { ModalsProvider } from "@mantine/modals";
 
 export default function App(props: AppPropsWithLayout) {
   const { Component, pageProps } = props;
@@ -68,31 +69,33 @@ export default function App(props: AppPropsWithLayout) {
               ...mantineTheme,
             }}
           >
-            <NotificationsProvider>
-              {/* for global styles */}
-              <GlobalStyles />
-              <AppShell
-                header={
-                  Component.layout === "admin" ? (
-                    <AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />
-                  ) : (
-                    <></>
-                  )
-                }
-                navbar={
-                  Component.layout === "admin" ? (
-                    <AdminNavbar isOpen={isOpen} links={links} />
-                  ) : (
-                    <></>
-                  )
-                }
-                navbarOffsetBreakpoint="sm"
-              >
-                <Container size="md" style={{ height: "100%" }}>
-                  {Component.getLayout(<Component {...pageProps} />)}
-                </Container>
-              </AppShell>
-            </NotificationsProvider>
+            <ModalsProvider>
+              <NotificationsProvider>
+                {/* for global styles */}
+                <GlobalStyles />
+                <AppShell
+                  header={
+                    Component.layout === "admin" ? (
+                      <AdminHeader isOpen={isOpen} onToggle={handlers.toggle} />
+                    ) : (
+                      <></>
+                    )
+                  }
+                  navbar={
+                    Component.layout === "admin" ? (
+                      <AdminNavbar isOpen={isOpen} links={links} />
+                    ) : (
+                      <></>
+                    )
+                  }
+                  navbarOffsetBreakpoint="sm"
+                >
+                  <Container size="md" style={{ height: "100%" }}>
+                    {Component.getLayout(<Component {...pageProps} />)}
+                  </Container>
+                </AppShell>
+              </NotificationsProvider>
+            </ModalsProvider>
           </MantineProvider>
         </ColorSchemeProvider>
       </QueryClientProvider>
