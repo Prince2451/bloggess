@@ -23,8 +23,14 @@ import dayjs from "dayjs";
 import { IconEye, IconPencil, IconTrash } from "@tabler/icons";
 import Link from "../../components/navigation/link";
 import { useRouter } from "next/router";
-import { usePosts } from "../../query/posts";
+import { usePosts, useDeletePost } from "../../query/posts";
 import { Post } from "../../types/elements/posts";
+import { openConfirmModal } from "@mantine/modals";
+import {
+  showNotification,
+  updateNotification,
+} from "../../utils/helpers/notifications";
+import { getErrorMessage } from "../../utils/helpers/axios";
 
 const useStyles = createStyles((theme) => ({
   postIndex: {
@@ -51,10 +57,60 @@ const Posts: NextPageWithLayout = () => {
     page: page,
     size: 10,
   });
+  const { mutate: del } = useDeletePost();
 
   const badgeColors: Record<string, BadgeProps["color"]> = {
     nature: "green",
     engineering: "blue",
+  };
+
+  const onDeletePost = (postId: Post["id"]) => {
+    openConfirmModal({
+      modalId: "delete-post",
+      title: "Delete This Post?",
+      centered: true,
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete this post? This action irreversible
+        </Text>
+      ),
+      labels: { confirm: "Delete post", cancel: "Cancel" },
+      confirmProps: { color: "red.7" },
+      onConfirm: () => {
+        showNotification({
+          id: "deleting-posts",
+          title: "Deleting...",
+          message: "Deleting your posts",
+          loading: true,
+          autoClose: false,
+          disallowClose: true,
+        });
+        del(
+          { postId },
+          {
+            onSuccess: () => {
+              updateNotification({
+                id: "deleting-posts",
+                loading: false,
+                type: "success",
+                message: "Post deleted successfully",
+                title: "Deleted",
+                autoClose: 3000,
+              });
+            },
+            onError: (err) => {
+              updateNotification({
+                id: "deleting-posts",
+                loading: false,
+                type: "danger",
+                message: getErrorMessage(err),
+                autoClose: 3000,
+              });
+            },
+          }
+        );
+      },
+    });
   };
 
   const columns: Array<DataTableColumn<Post>> = [
@@ -121,7 +177,7 @@ const Posts: NextPageWithLayout = () => {
           >
             <IconPencil />
           </ActionIcon>
-          <ActionIcon aria-label="Delete">
+          <ActionIcon onClick={() => onDeletePost(post.id)} aria-label="Delete">
             <IconTrash />
           </ActionIcon>
         </Group>
