@@ -23,29 +23,29 @@ const showNotification = ({
   ...extendedOptions
 }: NotificationProps & { type?: NotificationType }) => {
   let options: NotificationProps = extendedOptions;
-  const extednedFields: Partial<NotificationProps> = {};
+  const extendedFields: Partial<NotificationProps> = {};
   switch (type) {
     case "danger":
-      extednedFields.title = "Error";
-      extednedFields.color = "red";
+      extendedFields.title = "Error";
+      extendedFields.color = "red";
       break;
     case "info":
     case "default":
-      extednedFields.title = "Info";
-      extednedFields.color = "blue";
+      extendedFields.title = "Info";
+      extendedFields.color = "blue";
       break;
     case "success":
-      extednedFields.title = "Success";
-      extednedFields.color = "teal";
+      extendedFields.title = "Success";
+      extendedFields.color = "teal";
       break;
     case "warning":
-      extednedFields.title = "Warning";
-      extednedFields.color = "yellow";
+      extendedFields.title = "Warning";
+      extendedFields.color = "yellow";
       break;
   }
   options = {
     // using passed values first and then extended values
-    ...extednedFields,
+    ...extendedFields,
     ...options,
   };
   return mantineNotification(options);
