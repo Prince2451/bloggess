@@ -5,7 +5,8 @@ import withAuth from "../../../hoc/withAuth";
 import { useAddPosts } from "../../../query/posts";
 import { PostFormFields } from "../../../types/elements/posts";
 import { NextPageWithLayout } from "../../../types/utils";
-import { getErrorMessage, showNotification } from "../../../utils";
+import { getErrorMessage } from "../../../utils/helpers/axios";
+import { showNotification } from "../../../utils/helpers/notifications";
 
 const NewPost: NextPageWithLayout = () => {
   const { mutate: create, isLoading: isCreating } = useAddPosts();

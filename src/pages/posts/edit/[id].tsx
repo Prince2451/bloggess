@@ -7,7 +7,8 @@ import withAuth from "../../../hoc/withAuth";
 import { useEditPost, usePost } from "../../../query/posts";
 import { PostFormFields } from "../../../types/elements/posts";
 import { NextPageWithLayout } from "../../../types/utils";
-import { getErrorMessage, showNotification } from "../../../utils";
+import { getErrorMessage } from "../../../utils/helpers/axios";
+import { showNotification } from "../../../utils/helpers/notifications";
 
 const PostEdit: NextPageWithLayout = () => {
   const router = useRouter();
