@@ -28,6 +28,9 @@ type EditPostReq = Partial<Post> & {
 };
 type EditPostRes = Post;
 
+type DeletePostReq = { postId: Post["id"] };
+type DeletePostRes = void;
+
 function getPosts(payload: GetPostsReq) {
   return axiosInstance.get<GetPostsRes>(apiUrls.posts.all, {
     params: payload,
@@ -57,4 +60,17 @@ function editPost({ postId, ...payload }: EditPostReq) {
   });
 }
 
-export { getPosts, createPost, uploadCoverImage, getPost, editPost };
+function deletePost(payload: DeletePostReq) {
+  return axiosInstance.delete<DeletePostRes>(apiUrls.posts.delete, {
+    pathParams: { postId: payload.postId },
+  });
+}
+
+export {
+  getPosts,
+  createPost,
+  uploadCoverImage,
+  getPost,
+  editPost,
+  deletePost,
+};

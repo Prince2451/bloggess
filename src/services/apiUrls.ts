@@ -10,6 +10,7 @@ const apiUrls = {
     single: "/posts/:postId",
     create: "/posts",
     edit: "/posts/:postId",
+    delete: "/posts/:postId",
     uploadCoverImage: "posts/cover-image",
   },
 };
